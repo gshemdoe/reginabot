@@ -31,6 +31,16 @@ mongoose.connect(`mongodb+srv://${process.env.USER}:${process.env.PASS}@nodetuts
         ctx.reply('Hello karibu, nakusikiliza')
     })
 
+    bot.command('send', async ctx=> {
+        let txt = ctx.message.text
+        if (ctx.chat.id == imp.shemdoe) {
+            let chatid = txt.split('=')[1]
+            let ujumbe = txt.split('=')[2]
+
+            await bot.telegram.sendMessage(chatid, ujumbe)
+        }
+    })
+
     bot.on('chat_join_request', async ctx=> {
         let username = ctx.chatJoinRequest.from.first_name
         let chatid = ctx.chatJoinRequest.from.id
