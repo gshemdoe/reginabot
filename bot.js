@@ -54,7 +54,7 @@ mongoose.connect(`mongodb+srv://${process.env.USER}:${process.env.PASS}@nodetuts
             await nyumbuModel.create({chatid, username})
         }
         await bot.telegram.approveChatJoinRequest(cha_id, chatid)
-        await bot.telegram.sendMessage(chatid, `Hi <b>${username}</b> \nHongera 🎉 ombi lako la kujiunga na channel yetu <b>${title}</b> limekubaliwa, karibu sana`, {
+        await bot.telegram.sendMessage(chatid, `Hi <b>${username}</b> \nHongera 🎉 ombi lako la kujiunga na channel yetu <b>${title}</b> limekubaliwa, karibu sana.`, {
             parse_mode: 'HTML',
             reply_markup: {
                 inline_keyboard: [[{text: 'Ingia sasa', url: invite_link}]]
