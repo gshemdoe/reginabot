@@ -36,7 +36,7 @@ mongoose.connect(`mongodb+srv://${process.env.USER}:${process.env.PASS}@nodetuts
         let chatid = ctx.chatJoinRequest.from.id
         let cha_id = ctx.chatJoinRequest.chat.id
         let title = ctx.chatJoinRequest.chat.title
-        let invite_link = ctx.chatJoinRequest.invite_link
+        let invite_link = ctx.chatJoinRequest.invite_link.invite_link
 
         let nyumbu = await nyumbuModel.findOne({chatid})
         if(!nyumbu) {
