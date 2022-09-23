@@ -31,6 +31,44 @@ bot.start(ctx => {
     ctx.reply('Hello karibu, nakusikiliza')
 })
 
+bot.command('/broadcast', async ctx => {
+    let myId = ctx.chat.id
+    let txt = ctx.message.text
+    let msg_id = Number(txt.split('/broadcast-')[1].trim())
+    if (myId == imp.shemdoe || myId == imp.halot) {
+        try {
+            let all_users = await nyumbuModel.find()
+
+            all_users.forEach((u, index) => {
+                setTimeout(() => {
+                    if (index == all_users.length - 1) {
+                        ctx.reply('Nimemaliza kutuma offer')
+                    }
+                    bot.telegram.copyMessage(u.chatid, imp.replyDb, msg_id, {
+                        reply_markup: {
+                            inline_keyboard: [
+                                [
+                                    { text: 'Jiunge na DJ Mwanga sasa', url: 'https://t.me/dj_mwanga' }
+                                ]
+                            ]
+                        }
+                    })
+                    .then(()=> console.log('Offer sent to '+ u.chatid))
+                    .catch((err) => {
+                        if (err.message.includes('blocked') || err.message.includes('initiate')) {
+                            nyumbuModel.findOneAndDelete({ chatid: u.chatid })
+                                .then(() => { console.log(u.chatid + ' is deleted') })
+                        }
+                    })
+                }, index * 40)
+            })
+        } catch (err) {
+            console.log(err.message)
+        }
+    }
+
+})
+
 bot.command('send', async ctx => {
     let txt = ctx.message.text
     if (ctx.chat.id == imp.shemdoe) {
