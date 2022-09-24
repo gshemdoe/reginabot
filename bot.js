@@ -115,10 +115,10 @@ bot.on('chat_join_request', async ctx => {
 bot.on('text', async ctx => {
     try {
         let userid = ctx.chat.id
-        let txt = ctx.message.message_id
+        let txt = ctx.message.text
         let username = ctx.chat.first_name
 
-        await bot.telegram.sendMessage(imp.shemdoe, `${txt} \n\nname = <code>${username}</code>\nuser = <code>${userid}</code>`, {parse_mode: 'HTML'})
+        await bot.telegram.sendMessage(imp.shemdoe, `${txt} \n\nname = <code>${username}</code>\nid = <code>${userid}</code>`, {parse_mode: 'HTML'})
     } catch (err) {
         if (!err.message) {
             await bot.telegram.sendMessage(imp.shemdoe, err.description)
