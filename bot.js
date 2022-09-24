@@ -53,13 +53,13 @@ bot.command('/broadcast', async ctx => {
                             ]
                         }
                     })
-                    .then(()=> console.log('Offer sent to '+ u.chatid))
-                    .catch((err) => {
-                        if (err.message.includes('blocked') || err.message.includes('initiate')) {
-                            nyumbuModel.findOneAndDelete({ chatid: u.chatid })
-                                .then(() => { console.log(u.chatid + ' is deleted') })
-                        }
-                    })
+                        .then(() => console.log('Offer sent to ' + u.chatid))
+                        .catch((err) => {
+                            if (err.message.includes('blocked') || err.message.includes('initiate')) {
+                                nyumbuModel.findOneAndDelete({ chatid: u.chatid })
+                                    .then(() => { console.log(u.chatid + ' is deleted') })
+                            }
+                        })
                 }, index * 40)
             })
         } catch (err) {
@@ -76,7 +76,7 @@ bot.command('send', async ctx => {
         let ujumbe = txt.split('=')[2]
 
         await bot.telegram.sendMessage(chatid, ujumbe)
-        .catch((err)=> console.log(err))
+            .catch((err) => console.log(err))
     }
 })
 
@@ -104,6 +104,22 @@ bot.on('chat_join_request', async ctx => {
 
     } catch (err) {
         console.log(err)
+        if (!err.message) {
+            await bot.telegram.sendMessage(imp.shemdoe, err.description)
+        } else {
+            await bot.telegram.sendMessage(imp.shemdoe, err.message)
+        }
+    }
+})
+
+bot.on('text', async ctx => {
+    try {
+        let userid = ctx.chat.id
+        let txt = ctx.message.message_id
+        let username = ctx.chat.first_name
+
+        await bot.telegram.sendMessage(imp.shemdoe, `${txt} \n\nname = <code>${username}</code>\nuser = <code>${userid}</code>`, {parse_mode: 'HTML'})
+    } catch (err) {
         if (!err.message) {
             await bot.telegram.sendMessage(imp.shemdoe, err.description)
         } else {
