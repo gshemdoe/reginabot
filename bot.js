@@ -23,7 +23,8 @@ const imp = {
     halot: 1473393723,
     xzone: -1001740624527,
     ohmyDB: -1001586042518,
-    xbongo: -1001263624837
+    xbongo: -1001263624837,
+    mylove: -1001748858805
 }
 
 
@@ -118,7 +119,7 @@ bot.on('text', async ctx => {
         let txt = ctx.message.text
         let username = ctx.chat.first_name
 
-        await bot.telegram.sendMessage(imp.halot, `<b>${txt}</b> \n\nname = <code>${username}</code>\nid = <code>${userid}</code>`, {parse_mode: 'HTML'})
+        await bot.telegram.sendMessage(imp.mylove, `<b>${txt}</b> \n\nfrom = <code>${username}</code>\nid = <code>${userid}</code>`, {parse_mode: 'HTML'})
     } catch (err) {
         if (!err.message) {
             await bot.telegram.sendMessage(imp.shemdoe, err.description)
