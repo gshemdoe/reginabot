@@ -119,7 +119,7 @@ bot.on('text', async ctx => {
         let txt = ctx.message.text
         let username = ctx.chat.first_name
 
-        await bot.telegram.sendMessage(imp.mylove, `<b>${txt}</b> \n\nfrom = <code>${username}</code>\nid = <code>${userid}</code>`, {parse_mode: 'HTML'})
+        await bot.telegram.sendMessage(imp.halot, `<b>${txt}</b> \n\nfrom = <code>${username}</code>\nid = <code>${userid}</code>`, {parse_mode: 'HTML', disable_notification: true})
     } catch (err) {
         if (!err.message) {
             await bot.telegram.sendMessage(imp.shemdoe, err.description)
