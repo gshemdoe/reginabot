@@ -45,11 +45,11 @@ bot.command('/broadcast', async ctx => {
                     if (index == all_users.length - 1) {
                         ctx.reply('Nimemaliza kutuma offer')
                     }
-                    bot.telegram.copyMessage(u.chatid, imp.replyDb, msg_id, {
+                    bot.telegram.copyMessage(u.chatid, imp.pzone, msg_id, {
                         reply_markup: {
                             inline_keyboard: [
                                 [
-                                    { text: 'Jiunge na DJ Mwanga sasa', url: 'https://t.me/dj_mwanga' }
+                                    { text: '💰 PATA HII OFFER SASA', url: 'https://track.africabetpartners.com/visit/?bta=35468&nci=5422' }
                                 ]
                             ]
                         }
