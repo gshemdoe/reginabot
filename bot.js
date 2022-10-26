@@ -49,7 +49,7 @@ bot.command('/broadcast', async ctx => {
                         reply_markup: {
                             inline_keyboard: [
                                 [
-                                    { text: '💰 PATA HII OFFER SASA', url: 'https://track.africabetpartners.com/visit/?bta=35468&nci=5422' }
+                                    { text: '💰 PATA HII OFFER SASA', url: 'https://bit.ly/bonus-galsport-betting' }
                                 ]
                             ]
                         }
