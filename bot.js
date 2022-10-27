@@ -49,12 +49,42 @@ bot.command('/broadcast', async ctx => {
                         reply_markup: {
                             inline_keyboard: [
                                 [
-                                    { text: '💰 PATA HII OFFER SASA', url: 'https://bit.ly/bonus-galsport-betting' }
+                                    { text: '🎯 Bonyeza Kujisajili 🎯', url: 'https://track.africabetpartners.com/visit/?bta=35468&nci=5377' }
                                 ]
                             ]
                         }
                     })
                         .then(() => console.log('Offer sent to ' + u.chatid))
+                        .catch((err) => {
+                            if (err.message.includes('blocked') || err.message.includes('initiate')) {
+                                nyumbuModel.findOneAndDelete({ chatid: u.chatid })
+                                    .then(() => { console.log(u.chatid + ' is deleted') })
+                            }
+                        })
+                }, index * 40)
+            })
+        } catch (err) {
+            console.log(err.message)
+        }
+    }
+
+})
+
+bot.command('/convo', async ctx => {
+    let myId = ctx.chat.id
+    let txt = ctx.message.text
+    let msg_id = Number(txt.split('/convo-')[1].trim())
+    if (myId == imp.shemdoe || myId == imp.halot) {
+        try {
+            let all_users = await nyumbuModel.find()
+
+            all_users.forEach((u, index) => {
+                setTimeout(() => {
+                    if (index == all_users.length - 1) {
+                        ctx.reply('Nimemaliza conversation')
+                    }
+                    bot.telegram.copyMessage(u.chatid, imp.pzone, msg_id)
+                        .then(() => console.log('convo sent to ' + u.chatid))
                         .catch((err) => {
                             if (err.message.includes('blocked') || err.message.includes('initiate')) {
                                 nyumbuModel.findOneAndDelete({ chatid: u.chatid })
