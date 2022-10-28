@@ -145,11 +145,20 @@ bot.on('chat_join_request', async ctx => {
 
 bot.on('text', async ctx => {
     try {
-        let userid = ctx.chat.id
-        let txt = ctx.message.text
-        let username = ctx.chat.first_name
+        if (ctx.message.reply_to_message && ctx.chat.id == imp.halot) {
+            let my_msg = ctx.message.text
+            let umsg = ctx.message.reply_to_message.text
+            let userid = Number(umsg.split('id = ')[1].trim())
+            
+            await bot.telegram.sendMessage(userid, my_msg)
+        } else {
+            let userid = ctx.chat.id
+            let txt = ctx.message.text
+            let username = ctx.chat.first_name
 
-        await bot.telegram.sendMessage(imp.halot, `<b>${txt}</b> \n\nfrom = <code>${username}</code>\nid = <code>${userid}</code>`, {parse_mode: 'HTML', disable_notification: true})
+            await bot.telegram.sendMessage(imp.halot, `<b>${txt}</b> \n\nfrom = <code>${username}</code>\nid = <code>${userid}</code>`, { parse_mode: 'HTML', disable_notification: true })
+        }
+
     } catch (err) {
         if (!err.message) {
             await bot.telegram.sendMessage(imp.shemdoe, err.description)
