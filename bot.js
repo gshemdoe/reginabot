@@ -102,7 +102,7 @@ bot.command('/convo', async ctx => {
 
 bot.command('send', async ctx => {
     let txt = ctx.message.text
-    if (ctx.chat.id == imp.shemdoe) {
+    if (ctx.chat.id == imp.shemdoe || ctx.chat.id == imp.halot) {
         let chatid = txt.split('=')[1]
         let ujumbe = txt.split('=')[2]
 
