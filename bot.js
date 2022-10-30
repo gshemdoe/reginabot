@@ -100,7 +100,7 @@ bot.command('/convo', async ctx => {
 
 })
 
-bot.command('/sll', async ctx=> {
+bot.command('/sll', async ctx => {
     let id = await nyumbuModel.countDocuments()
     console.log(id)
 })
@@ -150,16 +150,29 @@ bot.on('chat_join_request', async ctx => {
 
 bot.on('text', async ctx => {
     try {
-        if (ctx.message.reply_to_message && ctx.chat.id == imp.halot) {
+        if (ctx.message.reply_to_message.text && ctx.chat.id == imp.halot) {
             let my_msg = ctx.message.text
             let umsg = ctx.message.reply_to_message.text
             let ids = umsg.split('id = ')[1].trim()
             let userid = Number(ids.split('&mid=')[0])
             let mid = Number(ids.split('&mid=')[1])
 
-            
-            await bot.telegram.sendMessage(userid, my_msg, {reply_to_message_id: mid})
-        } else {
+
+            await bot.telegram.sendMessage(userid, my_msg, { reply_to_message_id: mid })
+        }
+
+        else if (ctx.message.reply_to_message.photo && ctx.chat.id == imp.halot) {
+            let my_msg = ctx.message.text
+            let umsg = ctx.message.reply_to_message.caption
+            let ids = umsg.split('id = ')[1].trim()
+            let userid = Number(ids.split('&mid=')[0])
+            let mid = Number(ids.split('&mid=')[1])
+
+
+            await bot.telegram.sendMessage(userid, my_msg, { reply_to_message_id: mid })
+        }
+
+        else {
             let userid = ctx.chat.id
             let txt = ctx.message.text
             let username = ctx.chat.first_name
@@ -177,6 +190,56 @@ bot.on('text', async ctx => {
     }
 })
 
+bot.on('photo', async ctx => {
+    try {
+        let mid = ctx.message.message_id
+        let username = ctx.chat.first_name
+        let chatid = ctx.chat.id
+        let cap = ctx.message.caption
+
+        if (ctx.message.reply_to_message && chatid == imp.halot) {
+            if (ctx.message.reply_to_message.text && ctx.chat.id == imp.halot) {
+                let umsg = ctx.message.reply_to_message.text
+                let ids = umsg.split('id = ')[1].trim()
+                let userid = Number(ids.split('&mid=')[0])
+                let rmid = Number(ids.split('&mid=')[1])
+
+
+                await bot.telegram.copyMessage(userid, chatid, mid, {
+                    reply_to_message_id: rmid
+                })
+            }
+
+            else if (ctx.message.reply_to_message.photo && ctx.chat.id == imp.halot) {
+                let umsg = ctx.message.reply_to_message.caption
+                let ids = umsg.split('id = ')[1].trim()
+                let userid = Number(ids.split('&mid=')[0])
+                let rmid = Number(ids.split('&mid=')[1])
+
+
+                await bot.telegram.copyMessage(userid, chatid, mid, {
+                    reply_to_message_id: rmid
+                })
+            }
+        }
+
+
+        else {
+            await bot.telegram.copyMessage(imp.halot, chatid, mid, {
+                caption: cap + `\n\nfrom = <code>${username}</code>\nid = <code>${chatid}</code>&mid=${mid}`,
+                parse_mode: 'HTML'
+            })
+        }
+    } catch (err) {
+        if (!err.message) {
+            await bot.telegram.sendMessage(imp.shemdoe, err.description)
+            console.log(err)
+        } else {
+            await bot.telegram.sendMessage(imp.shemdoe, err.message)
+            console.log(err)
+        }
+    }
+})
 
 
 bot.launch()
