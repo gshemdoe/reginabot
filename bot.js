@@ -184,7 +184,6 @@ process.once('SIGTERM', () => bot.stop('SIGTERM'))
 process.on('unhandledRejection', (reason, promise) => {
     bot.telegram.sendMessage(imp.shemdoe, reason + ' It is an unhandled rejection.')
     console.log(reason)
-    process.exit()
     //on production here process will change from crash to start cools
 })
 
