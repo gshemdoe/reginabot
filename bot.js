@@ -150,27 +150,30 @@ bot.on('chat_join_request', async ctx => {
 
 bot.on('text', async ctx => {
     try {
-        if (ctx.message.reply_to_message.text && ctx.chat.id == imp.halot) {
-            let my_msg = ctx.message.text
-            let umsg = ctx.message.reply_to_message.text
-            let ids = umsg.split('id = ')[1].trim()
-            let userid = Number(ids.split('&mid=')[0])
-            let mid = Number(ids.split('&mid=')[1])
+        if (ctx.message.reply_to_message && ctx.chat.id == imp.halot) {
+            if (ctx.message.reply_to_message.text) {
+                let my_msg = ctx.message.text
+                let umsg = ctx.message.reply_to_message.text
+                let ids = umsg.split('id = ')[1].trim()
+                let userid = Number(ids.split('&mid=')[0])
+                let mid = Number(ids.split('&mid=')[1])
 
 
-            await bot.telegram.sendMessage(userid, my_msg, { reply_to_message_id: mid })
+                await bot.telegram.sendMessage(userid, my_msg, { reply_to_message_id: mid })
+            }
+
+            else if (ctx.message.reply_to_message.photo) {
+                let my_msg = ctx.message.text
+                let umsg = ctx.message.reply_to_message.caption
+                let ids = umsg.split('id = ')[1].trim()
+                let userid = Number(ids.split('&mid=')[0])
+                let mid = Number(ids.split('&mid=')[1])
+
+
+                await bot.telegram.sendMessage(userid, my_msg, { reply_to_message_id: mid })
+            }
         }
 
-        else if (ctx.message.reply_to_message.photo && ctx.chat.id == imp.halot) {
-            let my_msg = ctx.message.text
-            let umsg = ctx.message.reply_to_message.caption
-            let ids = umsg.split('id = ')[1].trim()
-            let userid = Number(ids.split('&mid=')[0])
-            let mid = Number(ids.split('&mid=')[1])
-
-
-            await bot.telegram.sendMessage(userid, my_msg, { reply_to_message_id: mid })
-        }
 
         else {
             let userid = ctx.chat.id
@@ -198,7 +201,7 @@ bot.on('photo', async ctx => {
         let cap = ctx.message.caption
 
         if (ctx.message.reply_to_message && chatid == imp.halot) {
-            if (ctx.message.reply_to_message.text && ctx.chat.id == imp.halot) {
+            if (ctx.message.reply_to_message.text) {
                 let umsg = ctx.message.reply_to_message.text
                 let ids = umsg.split('id = ')[1].trim()
                 let userid = Number(ids.split('&mid=')[0])
@@ -210,7 +213,7 @@ bot.on('photo', async ctx => {
                 })
             }
 
-            else if (ctx.message.reply_to_message.photo && ctx.chat.id == imp.halot) {
+            else if (ctx.message.reply_to_message.photo) {
                 let umsg = ctx.message.reply_to_message.caption
                 let ids = umsg.split('id = ')[1].trim()
                 let userid = Number(ids.split('&mid=')[0])
