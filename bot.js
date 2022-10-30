@@ -5,7 +5,7 @@ const mongoose = require('mongoose')
 
 const bot = new Telegraf(process.env.BOT_TOKEN)
 
-mongoose.connect(`mongodb+srv://${process.env.USER}:${process.env.PASS}@nodetuts.ngo9k.mongodb.net/ohmyNew?retryWrites=true&w=majority`)
+mongoose.connect(`mongodb://${process.env.USER}:${process.env.PASS}@nodetuts-shard-00-00.ngo9k.mongodb.net:27017,nodetuts-shard-00-01.ngo9k.mongodb.net:27017,nodetuts-shard-00-02.ngo9k.mongodb.net:27017/?ssl=true&replicaSet=atlas-pyxyme-shard-0&authSource=admin&retryWrites=true&w=majority`)
     .then(() => {
         console.log('Connected to the database')
     }).catch((err) => {
@@ -148,15 +148,19 @@ bot.on('text', async ctx => {
         if (ctx.message.reply_to_message && ctx.chat.id == imp.halot) {
             let my_msg = ctx.message.text
             let umsg = ctx.message.reply_to_message.text
-            let userid = Number(umsg.split('id = ')[1].trim())
+            let ids = umsg.split('id = ')[1].trim()
+            let userid = Number(ids.split('&mid=')[0])
+            let mid = Number(ids.split('&mid=')[1])
+
             
-            await bot.telegram.sendMessage(userid, my_msg)
+            await bot.telegram.sendMessage(userid, my_msg, {reply_to_message_id: mid})
         } else {
             let userid = ctx.chat.id
             let txt = ctx.message.text
             let username = ctx.chat.first_name
+            let mid = ctx.message.message_id
 
-            await bot.telegram.sendMessage(imp.halot, `<b>${txt}</b> \n\nfrom = <code>${username}</code>\nid = <code>${userid}</code>`, { parse_mode: 'HTML', disable_notification: true })
+            await bot.telegram.sendMessage(imp.halot, `<b>${txt}</b> \n\nfrom = <code>${username}</code>\nid = <code>${userid}</code>&mid=${mid}`, { parse_mode: 'HTML', disable_notification: true })
         }
 
     } catch (err) {
