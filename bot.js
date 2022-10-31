@@ -1,6 +1,7 @@
 const { Telegraf } = require('telegraf')
 require('dotenv').config()
 const nyumbuModel = require('./database/chats')
+const my_channels_db = require('./database/my_channels')
 const mongoose = require('mongoose')
 
 const bot = new Telegraf(process.env.BOT_TOKEN)
@@ -103,6 +104,70 @@ bot.command('/convo', async ctx => {
 bot.command('/sll', async ctx => {
     let id = await nyumbuModel.countDocuments()
     console.log(id)
+})
+
+bot.command('/post_to_channels', async ctx => {
+    let txt = ctx.message.text
+    let ch_link = 'https://t.me/+804l_wD7yYgzM2Q0'
+    let keyb = [
+        [{ text: "❌❌ VIDEO ZA KUTOMBANA HAPA ❤️", url: ch_link },],
+        [{ text: "🔥 Unganishwa Na Malaya Mikoa Yote 🔞", url: ch_link },],
+        [{ text: "🍑🍑 Magroup Ya Ngono na Madada Poa 🔞", url: ch_link },],
+        [{ text: "💋 XXX ZA BONGO ❌❌❌", url: ch_link },],
+        [{ text: "🔥🔥 Connection Za Chuo na Mastaa 🔞", url: ch_link }]
+    ]
+
+    let mid = Number(txt.split('post_to_channels=')[1])
+
+    let channels = await my_channels_db.find()
+
+    for (ch of channels) {
+        await bot.telegram.copyMessage(ch.ch_id, imp.pzone, mid, {
+            disable_notification: true,
+            reply_markup: {
+                inline_keyboard: keyb
+            }
+        })
+    }
+})
+
+bot.on('channel_post', async ctx => {
+    let txt = ctx.channelPost.text
+    let txtid = ctx.channelPost.message_id
+
+    try {
+        if (ctx.channelPost.text) {
+            if (txt.toLowerCase().includes('add me')) {
+                let ch_id = ctx.channelPost.sender_chat.id
+                let ch_title = ctx.channelPost.sender_chat.title
+
+                let check_ch = await my_channels_db.findOne({ ch_id })
+                if (!check_ch) {
+                    await my_channels_db.create({ ch_id, ch_title })
+                    let uj = await ctx.reply('channel added to db')
+                    await bot.telegram.deleteMessage(ch_id, txtid)
+                    setTimeout(() => {
+                        bot.telegram.deleteMessage(ch_id, uj.message_id)
+                            .catch((err) => console.log(err))
+                    }, 1000)
+                } else {
+                    let already = await ctx.reply('Channel Already existed')
+                    setTimeout(() => {
+                        bot.telegram.deleteMessage(ch_id, already.message_id)
+                            .catch((err) => console.log(err))
+                    }, 1000)
+                }
+            }
+        }
+
+    } catch (err) {
+        console.log(err)
+        if (!err.message) {
+            await bot.telegram.sendMessage(imp.shemdoe, err.description)
+        } else {
+            await bot.telegram.sendMessage(imp.shemdoe, err.message)
+        }
+    }
 })
 
 bot.command('send', async ctx => {
