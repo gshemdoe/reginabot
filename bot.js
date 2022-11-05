@@ -80,19 +80,21 @@ bot.command('/convo', async ctx => {
             let all_users = await nyumbuModel.find()
 
             all_users.forEach((u, index) => {
-                setTimeout(() => {
-                    if (index == all_users.length - 1) {
-                        ctx.reply('Nimemaliza conversation')
-                    }
-                    bot.telegram.copyMessage(u.chatid, imp.pzone, msg_id)
-                        .then(() => console.log('convo sent to ' + u.chatid))
-                        .catch((err) => {
-                            if (err.message.includes('blocked') || err.message.includes('initiate')) {
-                                nyumbuModel.findOneAndDelete({ chatid: u.chatid })
-                                    .then(() => { console.log(u.chatid + ' is deleted') })
-                            }
-                        })
-                }, index * 40)
+                if (u.blocked != true) {
+                    setTimeout(() => {
+                        if (index == all_users.length - 1) {
+                            ctx.reply('Nimemaliza conversation')
+                        }
+                        bot.telegram.copyMessage(u.chatid, imp.pzone, msg_id)
+                            .then(() => console.log('convo sent to ' + u.chatid))
+                            .catch((err) => {
+                                if (err.message.includes('blocked') || err.message.includes('initiate')) {
+                                    nyumbuModel.findOneAndDelete({ chatid: u.chatid })
+                                        .then(() => { console.log(u.chatid + ' is deleted') })
+                                }
+                            })
+                    }, index * 40)
+                }
             })
         } catch (err) {
             console.log(err.message)
@@ -102,8 +104,8 @@ bot.command('/convo', async ctx => {
 })
 
 bot.command('/sll', async ctx => {
-    let id = await nyumbuModel.countDocuments()
-    console.log(id)
+    await nyumbuModel.updateMany({}, { $set: { blocked: false } })
+    ctx.reply('Updated')
 })
 
 bot.command('/post_to_channels', async ctx => {
@@ -223,8 +225,13 @@ bot.on('text', async ctx => {
                 let userid = Number(ids.split('&mid=')[0])
                 let mid = Number(ids.split('&mid=')[1])
 
+                if (my_msg == 'block 666') {
+                    await nyumbuModel.findOneAndUpdate({ chatid: userid }, { blocked: true })
+                    await ctx.reply(userid + ' blocked for mass massaging')
+                } else {
+                    await bot.telegram.sendMessage(userid, my_msg, { reply_to_message_id: mid })
+                }
 
-                await bot.telegram.sendMessage(userid, my_msg, { reply_to_message_id: mid })
             }
 
             else if (ctx.message.reply_to_message.photo) {
