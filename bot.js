@@ -195,7 +195,7 @@ bot.on('chat_join_request', async ctx => {
 
         let nyumbu = await nyumbuModel.findOne({ chatid })
         if (!nyumbu) {
-            await nyumbuModel.create({ chatid, username })
+            await nyumbuModel.create({ chatid, username, blocked: false })
         }
         await bot.telegram.approveChatJoinRequest(cha_id, chatid)
         await bot.telegram.sendMessage(chatid, `Hi <b>${username}</b> \nHongera 🎉 ombi lako la kujiunga na channel yetu <b>${title}</b> limekubaliwa, karibu sana.`, {
