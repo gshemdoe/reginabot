@@ -208,9 +208,13 @@ bot.on('chat_join_request', async ctx => {
     } catch (err) {
         console.log(err)
         if (!err.message) {
-            await bot.telegram.sendMessage(imp.shemdoe, err.description)
+            if (!err.description.includes('bot was blocked') || !err.description.includes('USER_ALREADY')) {
+                await bot.telegram.sendMessage(imp.shemdoe, err.description)
+            }
         } else {
-            await bot.telegram.sendMessage(imp.shemdoe, err.message)
+            if (!err.message.includes('bot was blocked') || !err.message.includes('USER_ALREADY')) {
+                await bot.telegram.sendMessage(imp.shemdoe, err.message)
+            }
         }
     }
 })
