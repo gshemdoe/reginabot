@@ -28,9 +28,21 @@ const imp = {
     mylove: -1001748858805
 }
 
+async function create(bot, ctx) {
+    let starter = await nyumbuModel.findOne({ chatid: ctx.chat.id })
+    if (!starter) {
+        await nyumbuModel.create({
+            chatid: ctx.chat.id,
+            username: ctx.chat.first_name
+        })
+        await bot.telegram.sendMessage(imp.shemdoe, `${ctx.chat.first_name} added to database with start`)
+    }
+}
 
-bot.start(ctx => {
-    ctx.reply('Hello karibu, nakusikiliza')
+
+bot.start(async ctx => {
+    await ctx.reply('Hello karibu, nakusikiliza')
+    create(bot, ctx)
 })
 
 bot.command('/broadcast', async ctx => {
@@ -252,6 +264,9 @@ bot.on('text', async ctx => {
 
 
         else {
+            //create user if not on database
+            await create(bot, ctx)
+
             let userid = ctx.chat.id
             let txt = ctx.message.text
             let username = ctx.chat.first_name
