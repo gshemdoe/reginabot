@@ -357,4 +357,5 @@ process.on('unhandledRejection', (reason, promise) => {
 process.on('uncaughtException', (err) => {
     console.log(err)
     bot.telegram.sendMessage(741815228, err.message + ' - It is ana uncaught exception.')
+    .catch((err)=> {console.log(err.message + ' while sending you')})
 })
