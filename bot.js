@@ -22,27 +22,29 @@ const imp = {
     prod_domain: 't.me/ohmychannelV2bot?start=',
     shemdoe: 741815228,
     halot: 1473393723,
+    sh1xbet: 5755271222,
     xzone: -1001740624527,
     ohmyDB: -1001586042518,
     xbongo: -1001263624837,
     mylove: -1001748858805
 }
 
-async function create(bot, ctx) {
+async function create(bot, ctx, type) {
     let starter = await nyumbuModel.findOne({ chatid: ctx.chat.id })
     if (!starter) {
         await nyumbuModel.create({
             chatid: ctx.chat.id,
             username: ctx.chat.first_name
         })
-        await bot.telegram.sendMessage(imp.shemdoe, `${ctx.chat.first_name} added to database with start`)
+        await bot.telegram.sendMessage(imp.shemdoe, `${ctx.chat.first_name} added to database with ${type}`)
     }
 }
 
 
 bot.start(async ctx => {
+    let typ = 'start command'
     await ctx.reply('Hello karibu, nakusikiliza')
-    create(bot, ctx)
+    create(bot, ctx, typ)
 })
 
 bot.command('/broadcast', async ctx => {
@@ -233,7 +235,7 @@ bot.on('chat_join_request', async ctx => {
 
 bot.on('text', async ctx => {
     try {
-        if (ctx.message.reply_to_message && ctx.chat.id == imp.halot) {
+        if (ctx.message.reply_to_message && ctx.chat.id == imp.sh1xbet) {
             if (ctx.message.reply_to_message.text) {
                 let my_msg = ctx.message.text
                 let umsg = ctx.message.reply_to_message.text
@@ -265,14 +267,15 @@ bot.on('text', async ctx => {
 
         else {
             //create user if not on database
-            await create(bot, ctx)
+            let typ = 'sending message'
+            await create(bot, ctx, typ)
 
             let userid = ctx.chat.id
             let txt = ctx.message.text
             let username = ctx.chat.first_name
             let mid = ctx.message.message_id
 
-            await bot.telegram.sendMessage(imp.halot, `<b>${txt}</b> \n\nfrom = <code>${username}</code>\nid = <code>${userid}</code>&mid=${mid}`, { parse_mode: 'HTML', disable_notification: true })
+            await bot.telegram.sendMessage(imp.sh1xbet, `<b>${txt}</b> \n\nfrom = <code>${username}</code>\nid = <code>${userid}</code>&mid=${mid}`, { parse_mode: 'HTML', disable_notification: true })
         }
 
     } catch (err) {
@@ -291,7 +294,7 @@ bot.on('photo', async ctx => {
         let chatid = ctx.chat.id
         let cap = ctx.message.caption
 
-        if (ctx.message.reply_to_message && chatid == imp.halot) {
+        if (ctx.message.reply_to_message && chatid == imp.sh1xbet) {
             if (ctx.message.reply_to_message.text) {
                 let umsg = ctx.message.reply_to_message.text
                 let ids = umsg.split('id = ')[1].trim()
@@ -319,7 +322,7 @@ bot.on('photo', async ctx => {
 
 
         else {
-            await bot.telegram.copyMessage(imp.halot, chatid, mid, {
+            await bot.telegram.copyMessage(imp.sh1xbet, chatid, mid, {
                 caption: cap + `\n\nfrom = <code>${username}</code>\nid = <code>${chatid}</code>&mid=${mid}`,
                 parse_mode: 'HTML'
             })
