@@ -42,9 +42,14 @@ async function create(bot, ctx, type) {
 
 
 bot.start(async ctx => {
-    let typ = 'start command'
-    await ctx.reply('Hello karibu, nakusikiliza')
-    create(bot, ctx, typ)
+    try {
+        let typ = 'start command'
+        await ctx.reply('Hello karibu, nakusikiliza')
+        create(bot, ctx, typ)
+    } catch (err) {
+        console.log(err.message)
+    }
+
 })
 
 bot.command('/broadcast', async ctx => {
@@ -360,8 +365,8 @@ process.on('unhandledRejection', (reason, promise) => {
 process.on('uncaughtException', (err) => {
     console.log(err)
     bot.telegram.sendMessage(741815228, err.message + ' - It is ana uncaught exception.')
-    .catch((err)=> {
-        console.log(err.message + ' while sending you')
-        process.exit()
-    })
+        .catch((err) => {
+            console.log(err.message + ' while sending you')
+            process.exit()
+        })
 })
