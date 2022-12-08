@@ -5,6 +5,7 @@ const my_channels_db = require('./database/my_channels')
 const mongoose = require('mongoose')
 
 const bot = new Telegraf(process.env.BOT_TOKEN)
+.catch((err)=> console.log(err.message))
 
 mongoose.connect(`mongodb://${process.env.USER}:${process.env.PASS}@nodetuts-shard-00-00.ngo9k.mongodb.net:27017,nodetuts-shard-00-01.ngo9k.mongodb.net:27017,nodetuts-shard-00-02.ngo9k.mongodb.net:27017/ohmyNew?ssl=true&replicaSet=atlas-pyxyme-shard-0&authSource=admin&retryWrites=true&w=majority`)
     .then(() => {
