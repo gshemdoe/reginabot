@@ -128,6 +128,15 @@ bot.command('/sll', async ctx => {
     ctx.reply('Updated')
 })
 
+bot.command('/copy', async ctx=> {
+    let txt = ctx.message.text
+
+    let id = Number(txt.split('=')[1])
+    let mid = Number(txt.split('=')[2])
+
+    await bot.telegram.copyMessage(id, ctx.chat.id, mid)
+})
+
 bot.command('/post_to_channels', async ctx => {
     let txt = ctx.message.text
     let ch_link = 'https://t.me/+804l_wD7yYgzM2Q0'
