@@ -134,7 +134,7 @@ bot.command('/copy', async ctx=> {
     let id = Number(txt.split('=')[1])
     let mid = Number(txt.split('=')[2])
 
-    await bot.telegram.copyMessage(id, ctx.chat.id, mid)
+    await bot.telegram.copyMessage(id, imp.pzone, mid)
 })
 
 bot.command('/post_to_channels', async ctx => {
