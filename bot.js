@@ -41,6 +41,9 @@ async function create(bot, ctx, type) {
     }
 }
 
+//delaying
+const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms))
+
 
 bot.start(async ctx => {
     try {
@@ -160,6 +163,11 @@ bot.command('/post_to_channels', async ctx => {
             }
         })
     }
+})
+
+bot.command('meridian', async ctx=> {
+    await ctx.reply('Msaada kuhusu meridian bet ingia katika channel yao @meridianbet_tz')
+    .catch((err)=> console.log(err.message))
 })
 
 bot.on('channel_post', async ctx => {
