@@ -5,7 +5,7 @@ const my_channels_db = require('./database/my_channels')
 const mongoose = require('mongoose')
 
 const bot = new Telegraf(process.env.BOT_TOKEN)
-.catch((err)=> console.log(err.message))
+    .catch((err) => console.log(err.message))
 
 mongoose.connect(`mongodb://${process.env.USER}:${process.env.PASS}@nodetuts-shard-00-00.ngo9k.mongodb.net:27017,nodetuts-shard-00-01.ngo9k.mongodb.net:27017,nodetuts-shard-00-02.ngo9k.mongodb.net:27017/ohmyNew?ssl=true&replicaSet=atlas-pyxyme-shard-0&authSource=admin&retryWrites=true&w=majority`)
     .then(() => {
@@ -131,7 +131,7 @@ bot.command('/sll', async ctx => {
     ctx.reply('Updated')
 })
 
-bot.command('/copy', async ctx=> {
+bot.command('/copy', async ctx => {
     let txt = ctx.message.text
 
     let id = Number(txt.split('=')[1])
@@ -165,9 +165,9 @@ bot.command('/post_to_channels', async ctx => {
     }
 })
 
-bot.command('meridian', async ctx=> {
+bot.command('meridian', async ctx => {
     await ctx.reply('Msaada kuhusu meridian bet ingia katika channel yao @meridianbet_tz')
-    .catch((err)=> console.log(err.message))
+        .catch((err) => console.log(err.message))
 })
 
 bot.on('channel_post', async ctx => {
@@ -217,6 +217,21 @@ bot.command('send', async ctx => {
 
         await bot.telegram.sendMessage(chatid, ujumbe)
             .catch((err) => console.log(err))
+    }
+})
+
+bot.command('calc', async ctx => {
+    try {
+        let txt = ctx.message.text
+        let amnt = Number(txt.split(' ')[1])
+
+        let final = amnt * 0.95
+        let fee = amnt - final
+
+        await ctx.reply(`Customer ID: \nAmount: ${amnt.toLocaleString('en-us')} TZS \nFee: ${fee} TZS \nFinal deposited amount: ${final.toLocaleString('en-us')} TZS`)
+    } catch (err) {
+        await ctx.reply(err.message)
+            .catch((err) => console.log(err.message))
     }
 })
 
