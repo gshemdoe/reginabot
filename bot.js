@@ -220,21 +220,6 @@ bot.command('send', async ctx => {
     }
 })
 
-bot.command('calc', async ctx => {
-    try {
-        let txt = ctx.message.text
-        let amnt = Number(txt.split(' ')[1])
-
-        let final = amnt * 0.95
-        let fee = amnt - final
-
-        await ctx.reply(`Customer ID: \nAmount: ${amnt.toLocaleString('en-us')} TZS \nFee: ${fee} TZS \nFinal deposited amount: ${final.toLocaleString('en-us')} TZS`)
-    } catch (err) {
-        await ctx.reply(err.message)
-            .catch((err) => console.log(err.message))
-    }
-})
-
 bot.on('chat_join_request', async ctx => {
     try {
 
@@ -284,7 +269,14 @@ bot.on('text', async ctx => {
                 if (my_msg == 'block 666') {
                     await nyumbuModel.findOneAndUpdate({ chatid: userid }, { blocked: true })
                     await ctx.reply(userid + ' blocked for mass massaging')
-                } else {
+                }
+
+                else if(my_msg == 'unblock 666') {
+                    await nyumbuModel.findOneAndUpdate({ chatid: userid }, { blocked: false })
+                    await ctx.reply(userid + ' unblocked for mass massaging')
+                }
+                
+                else {
                     await bot.telegram.sendMessage(userid, my_msg, { reply_to_message_id: mid })
                 }
 
