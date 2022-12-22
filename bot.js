@@ -131,13 +131,22 @@ bot.command('/sll', async ctx => {
     ctx.reply('Updated')
 })
 
-bot.command('/copy', async ctx => {
-    let txt = ctx.message.text
+bot.command('copy', async ctx => {
+    try {
+        if (ctx.message.reply_to_message) {
+            let userid = ctx.message.reply_to_message.text
+            userid = Number(userid.split('id = ')[1].split('&mid')[0].trim())
 
-    let id = Number(txt.split('=')[1])
-    let mid = Number(txt.split('=')[2])
+            let pid = ctx.message.text
+            pid = Number(pid.split(' ')[1])
 
-    await bot.telegram.copyMessage(id, imp.pzone, mid)
+            await bot.telegram.copyMessage(userid, imp.pzone, pid)
+            await ctx.reply(`msg with id ${pid} was copied successfully to user with id ${userid}`)
+        }
+    } catch (err) {
+        console.log(err)
+        await ctx.reply(err.message).catch(e=> console.log(e.message))
+    }
 })
 
 bot.command('/post_to_channels', async ctx => {
@@ -261,6 +270,8 @@ bot.on('text', async ctx => {
         if (ctx.message.reply_to_message && ctx.chat.id == imp.sh1xbet) {
             if (ctx.message.reply_to_message.text) {
                 let my_msg = ctx.message.text
+                let myid = ctx.chat.id
+                let my_msg_id = ctx.message.message_id
                 let umsg = ctx.message.reply_to_message.text
                 let ids = umsg.split('id = ')[1].trim()
                 let userid = Number(ids.split('&mid=')[0])
@@ -271,13 +282,13 @@ bot.on('text', async ctx => {
                     await ctx.reply(userid + ' blocked for mass massaging')
                 }
 
-                else if(my_msg == 'unblock 666') {
+                else if (my_msg == 'unblock 666') {
                     await nyumbuModel.findOneAndUpdate({ chatid: userid }, { blocked: false })
                     await ctx.reply(userid + ' unblocked for mass massaging')
                 }
-                
+
                 else {
-                    await bot.telegram.sendMessage(userid, my_msg, { reply_to_message_id: mid })
+                    await bot.telegram.copyMessage(userid, myid, my_msg_id, { reply_to_message_id: mid })
                 }
 
             }
