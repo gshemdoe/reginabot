@@ -103,7 +103,7 @@ bot.command('/convo', async ctx => {
     if (myId == imp.shemdoe || myId == imp.halot) {
         try {
             await mkekadb.create({ mid: msg_id})
-            
+
             let all_users = await nyumbuModel.find()
 
             all_users.forEach((u, index) => {
@@ -242,13 +242,9 @@ bot.command('mkeka', async ctx => {
             }
         })
         if (mk.length == 0) {
-            await ctx.sendChatAction('typing')
-            await delay(1000)
             await ctx.reply('Leo bado sijaandaa mkeka mpendwa.')
         } else {
             for (let m of mk) {
-                await ctx.sendChatAction('typing')
-                await delay(1000)
                 await bot.telegram.copyMessage(ctx.chat.id, imp.pzone, m.mid)
                 await delay(1000)
             }
