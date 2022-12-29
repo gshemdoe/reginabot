@@ -2,6 +2,8 @@ const { Telegraf } = require('telegraf')
 require('dotenv').config()
 const nyumbuModel = require('./database/chats')
 const my_channels_db = require('./database/my_channels')
+const mkekadb = require('./database/mkeka')
+const vidb = require('./database/db')
 const mongoose = require('mongoose')
 
 const bot = new Telegraf(process.env.BOT_TOKEN)
@@ -100,6 +102,8 @@ bot.command('/convo', async ctx => {
     let msg_id = Number(txt.split('/convo-')[1].trim())
     if (myId == imp.shemdoe || myId == imp.halot) {
         try {
+            await mkekadb.create({ mid: msg_id})
+            
             let all_users = await nyumbuModel.find()
 
             all_users.forEach((u, index) => {
@@ -145,7 +149,7 @@ bot.command('copy', async ctx => {
         }
     } catch (err) {
         console.log(err)
-        await ctx.reply(err.message).catch(e=> console.log(e.message))
+        await ctx.reply(err.message).catch(e => console.log(e.message))
     }
 })
 
@@ -226,6 +230,43 @@ bot.command('send', async ctx => {
 
         await bot.telegram.sendMessage(chatid, ujumbe)
             .catch((err) => console.log(err))
+    }
+})
+
+bot.command('mkeka', async ctx => {
+    try {
+        let start = new Date().toDateString()
+        let mk = await mkekadb.find({
+            createdAt: {
+                $gte: start
+            }
+        })
+        if (mk.length == 0) {
+            await ctx.sendChatAction('typing')
+            await delay(1000)
+            await ctx.reply('Leo bado sijaandaa mkeka mpendwa.')
+        } else {
+            for (let m of mk) {
+                await ctx.sendChatAction('typing')
+                await delay(1000)
+                await bot.telegram.copyMessage(ctx.chat.id, imp.pzone, m.mid)
+                await delay(1000)
+            }
+        }
+
+    } catch (err) {
+        console.log(err.message)
+    }
+})
+
+bot.command('wakubwa', async ctx => {
+    try {
+        let idadi = await vidb.countDocuments()
+        let rand = Math.floor(Math.random() * idadi)
+        let vid = await vidb.findOne().skip(rand)
+        await bot.telegram.copyMessage(ctx.chat.id, imp.ohmyDB, vid.msgId)
+    } catch (err) {
+        console.log(err.message)
     }
 })
 
