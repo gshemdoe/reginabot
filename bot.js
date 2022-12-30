@@ -243,14 +243,16 @@ bot.command('send', async ctx => {
 
 bot.command('mkeka', async ctx => {
     try {
-        let start = new Date().toDateString()
+        //working on utc00 - forwarding +3+5 hours to expire mkeka at 1900
+        let start = new Date()
+        start.setHours(start.getHours() + 3 + 5)
         let mk = await mkekadb.find({
             createdAt: {
-                $gte: start
+                $gte: start.toDateString()
             }
         })
         if (mk.length == 0) {
-            await ctx.reply('Leo bado sijaandaa mkeka mpendwa.')
+            await ctx.reply('Bado sijaandaa mkeka mwingine mpendwa.')
         } else {
             for (let m of mk) {
                 await bot.telegram.copyMessage(ctx.chat.id, imp.pzone, m.mid)
