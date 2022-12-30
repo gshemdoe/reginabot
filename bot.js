@@ -102,8 +102,6 @@ bot.command('/convo', async ctx => {
     let msg_id = Number(txt.split('/convo-')[1].trim())
     if (myId == imp.shemdoe || myId == imp.halot) {
         try {
-            await mkekadb.create({ mid: msg_id})
-
             let all_users = await nyumbuModel.find()
 
             all_users.forEach((u, index) => {
