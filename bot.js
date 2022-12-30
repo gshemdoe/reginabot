@@ -268,7 +268,9 @@ bot.command('wakubwa', async ctx => {
         let idadi = await vidb.countDocuments()
         let rand = Math.floor(Math.random() * idadi)
         let vid = await vidb.findOne().skip(rand)
-        await bot.telegram.copyMessage(ctx.chat.id, imp.ohmyDB, vid.msgId)
+        await bot.telegram.copyMessage(ctx.chat.id, imp.ohmyDB, vid.msgId, {
+            protect_content: true
+        })
     } catch (err) {
         console.log(err.message)
     }
