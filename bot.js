@@ -135,6 +135,16 @@ bot.command('/sll', async ctx => {
     ctx.reply('Updated')
 })
 
+bot.command('jamvi', async ctx=> {
+    try {
+        let mk = Number(ctx.message.text.split(' ')[1])
+        await mkekadb.create({mid: mk})
+        await ctx.reply('mkeka created')
+    } catch (err) {
+        console.log(err.message)
+    }
+})
+
 bot.command('copy', async ctx => {
     try {
         if (ctx.message.reply_to_message) {
