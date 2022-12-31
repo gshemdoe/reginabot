@@ -133,16 +133,6 @@ bot.command('/sll', async ctx => {
     ctx.reply('Updated')
 })
 
-bot.command('jamvi', async ctx=> {
-    try {
-        let mk = Number(ctx.message.text.split(' ')[1])
-        await mkekadb.create({mid: mk})
-        await ctx.reply('mkeka created')
-    } catch (err) {
-        console.log(err.message)
-    }
-})
-
 bot.command('copy', async ctx => {
     try {
         if (ctx.message.reply_to_message) {
@@ -220,6 +210,19 @@ bot.on('channel_post', async ctx => {
             }
         }
 
+        if (ctx.channelPost.reply_to_message && ctx.channelPost.chat.id == imp.pzone) {
+            let rp_id = ctx.channelPost.reply_to_message.message_id
+            let rp_msg = ctx.channelPost.reply_to_message.text
+
+            if (txt.toLowerCase() == 'post gal') {
+                await mkekadb.create({ mid: rp_id, brand: 'gal' })
+                await ctx.reply('Mkeka uko live Gal Sport')
+            } else if (txt.toLowerCase() == 'post 10bet') {
+                await mkekadb.create({ mid: rp_id, brand: '10bet' })
+                await ctx.reply('Mkeka uko live 10bet')
+            }
+        }
+
     } catch (err) {
         console.log(err)
         if (!err.message) {
@@ -248,8 +251,36 @@ bot.command('mkeka', async ctx => {
         start.setHours(start.getHours() + 3 + 5)
         let mk = await mkekadb.find({
             createdAt: {
+                //give to datestring to compare only date and not time
                 $gte: start.toDateString()
+            },
+            brand: 'gal'
+        })
+        if (mk.length == 0) {
+            await ctx.reply('Bado sijaandaa mkeka mwingine mpendwa.')
+        } else {
+            for (let m of mk) {
+                await bot.telegram.copyMessage(ctx.chat.id, imp.pzone, m.mid)
+                await delay(1000)
             }
+        }
+
+    } catch (err) {
+        console.log(err.message)
+    }
+})
+
+bot.command('mkeka2', async ctx => {
+    try {
+        //working on utc00 - forwarding +3+5 hours to expire mkeka at 1900
+        let start = new Date()
+        start.setHours(start.getHours() + 3 + 5)
+        let mk = await mkekadb.find({
+            createdAt: {
+                //give to datestring to compare only date and not time
+                $gte: start.toDateString()
+            },
+            brand: '10bet'
         })
         if (mk.length == 0) {
             await ctx.reply('Bado sijaandaa mkeka mwingine mpendwa.')
