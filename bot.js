@@ -50,7 +50,7 @@ const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms))
 bot.start(async ctx => {
     try {
         let typ = 'start command'
-        await ctx.reply('Hello karibu, nakusikiliza')
+        await ctx.reply('Hello karibu, tumia hizi commands: \n\n/mkeka - kupata mkeka wa Gal Sport \n/mkeka2 - kupata mkeka wa 10bet\n\nBonyeza <b>Menu</b> hapo chini kwa commands zingine.', {parse_mode: 'HTML'})
         create(bot, ctx, typ)
     } catch (err) {
         console.log(err.message)
@@ -246,9 +246,9 @@ bot.command('send', async ctx => {
 
 bot.command('mkeka', async ctx => {
     try {
-        //working on utc00 - forwarding +3+5 hours to expire mkeka at 1900
+        //working on utc00 - forwarding +3+4 hours to expire mkeka at 2000
         let start = new Date()
-        start.setHours(start.getHours() + 3 + 5)
+        start.setHours(start.getHours() + 3 + 4)
         let mk = await mkekadb.find({
             createdAt: {
                 //give to datestring to compare only date and not time
@@ -272,9 +272,9 @@ bot.command('mkeka', async ctx => {
 
 bot.command('mkeka2', async ctx => {
     try {
-        //working on utc00 - forwarding +3+5 hours to expire mkeka at 1900
+        //working on utc00 - forwarding +3+4 hours to expire mkeka at 2000
         let start = new Date()
-        start.setHours(start.getHours() + 3 + 5)
+        start.setHours(start.getHours() + 3 + 4)
         let mk = await mkekadb.find({
             createdAt: {
                 //give to datestring to compare only date and not time
