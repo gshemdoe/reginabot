@@ -257,7 +257,7 @@ bot.command('mkeka', async ctx => {
             brand: 'gal'
         })
         if (mk.length == 0) {
-            await ctx.reply('Bado sijaandaa mkeka mwingine mpendwa.')
+            await ctx.reply('Bado sijaandaa mkeka mwingine wa Gal Sport Betting mpendwa.')
         } else {
             for (let m of mk) {
                 await bot.telegram.copyMessage(ctx.chat.id, imp.pzone, m.mid)
@@ -283,7 +283,7 @@ bot.command('mkeka2', async ctx => {
             brand: '10bet'
         })
         if (mk.length == 0) {
-            await ctx.reply('Bado sijaandaa mkeka mwingine mpendwa.')
+            await ctx.reply('Bado sijaandaa mkeka mwingine wa 10bet mpendwa.')
         } else {
             for (let m of mk) {
                 await bot.telegram.copyMessage(ctx.chat.id, imp.pzone, m.mid)
