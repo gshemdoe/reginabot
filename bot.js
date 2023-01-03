@@ -4,6 +4,7 @@ const nyumbuModel = require('./database/chats')
 const my_channels_db = require('./database/my_channels')
 const mkekadb = require('./database/mkeka')
 const vidb = require('./database/db')
+const mkekaMega = require('./database/mkeka-mega')
 const mongoose = require('mongoose')
 
 const bot = new Telegraf(process.env.BOT_TOKEN)
@@ -50,7 +51,7 @@ const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms))
 bot.start(async ctx => {
     try {
         let typ = 'start command'
-        await ctx.reply('Hello karibu, tumia hizi commands: \n\n/mkeka - kupata mkeka wa Gal Sport \n/mkeka2 - kupata mkeka wa 10bet\n\nBonyeza <b>Menu</b> hapo chini kwa commands zingine.', {parse_mode: 'HTML'})
+        await ctx.reply('Hello karibu, tumia hizi commands: \n\n/mkeka - kupata mkeka wa Gal Sport \n/mkeka2 - kupata mkeka wa 10bet\n\nBonyeza <b>Menu</b> hapo chini kwa commands zingine.', { parse_mode: 'HTML' })
         create(bot, ctx, typ)
     } catch (err) {
         console.log(err.message)
@@ -128,6 +129,42 @@ bot.command('/convo', async ctx => {
 
 })
 
+bot.command('/mkeka', async ctx => {
+    try {
+        let nairobi = new Date().toLocaleDateString('en-GB', { timeZone: 'Africa/Nairobi' })
+        let keka = await mkekaMega.find({ date: nairobi })
+        let txt = `<b><u>🔥 Mkeka wa Leo [ ${nairobi} ]</u></b>\n\n\n`
+        let odds = 1
+        if (keka) {
+            for (let m of keka) {
+                txt = txt + `🕔 <b>${m.date},  ${m.time}</b>\n⚽️ <b>${m.match}</b>\n✅ <b>${m.bet}</b> \n\n\n`
+                odds = (odds * m.odds).toFixed(2)
+            }
+
+            let gsb = 'https://track.africabetpartners.com/visit/?bta=35468&nci=5377'
+
+            let finaText = txt + `<b>🔥 Total Odds: ${odds}</b>\n\nOption hizi zinapatikana Gal Sport Betting pekee, kama bado huna account,\n\n<b>👤 Jisajili Hapa</b>\n<a href="${gsb}">https://m.gsb.co.tz/register\nhttps://m.gsb.co.tz/register</a>\n\n<u>Msaada </u>\nmsaada wa kuzielewa hizi option bonyeza <b>/maelezo</b>`
+
+            await ctx.reply(finaText, { parse_mode: 'HTML', disable_web_page_preview: true })
+        }
+    } catch (err) {
+        await bot.telegram.sendMessage(imp.shemdoe, err.message)
+            .catch((e) => console.log(e.message))
+        console.log(err.message)
+    }
+
+})
+
+bot.command('maelezo', async ctx=> {
+    await bot.telegram.copyMessage(ctx.chat.id, imp.pzone, 7567)
+    .catch((err)=> console.log(err.message))
+})
+
+bot.command('site', async ctx=> {
+    await ctx.reply(`Hello!, ukiona kimya tembelea site yangu ya mikeka https://mkekawaleo.com`)
+    .catch((err)=> console.log(err.message))
+})
+
 bot.command('/sll', async ctx => {
     await nyumbuModel.updateMany({}, { $set: { blocked: false } })
     ctx.reply('Updated')
@@ -174,11 +211,6 @@ bot.command('/post_to_channels', async ctx => {
             }
         })
     }
-})
-
-bot.command('meridian', async ctx => {
-    await ctx.reply('Msaada kuhusu meridian bet ingia katika channel yao @meridianbet_tz')
-        .catch((err) => console.log(err.message))
 })
 
 bot.on('channel_post', async ctx => {
@@ -241,58 +273,6 @@ bot.command('send', async ctx => {
 
         await bot.telegram.sendMessage(chatid, ujumbe)
             .catch((err) => console.log(err))
-    }
-})
-
-bot.command('mkeka', async ctx => {
-    try {
-        //working on utc00 - forwarding +3+4 hours to expire mkeka at 2000
-        let start = new Date()
-        start.setHours(start.getHours() + 3 + 4)
-        let mk = await mkekadb.find({
-            createdAt: {
-                //give to datestring to compare only date and not time
-                $gte: start.toDateString()
-            },
-            brand: 'gal'
-        })
-        if (mk.length == 0) {
-            await ctx.reply('Bado sijaandaa mkeka mwingine wa Gal Sport Betting mpendwa.')
-        } else {
-            for (let m of mk) {
-                await bot.telegram.copyMessage(ctx.chat.id, imp.pzone, m.mid)
-                await delay(1000)
-            }
-        }
-
-    } catch (err) {
-        console.log(err.message)
-    }
-})
-
-bot.command('mkeka2', async ctx => {
-    try {
-        //working on utc00 - forwarding +3+4 hours to expire mkeka at 2000
-        let start = new Date()
-        start.setHours(start.getHours() + 3 + 4)
-        let mk = await mkekadb.find({
-            createdAt: {
-                //give to datestring to compare only date and not time
-                $gte: start.toDateString()
-            },
-            brand: '10bet'
-        })
-        if (mk.length == 0) {
-            await ctx.reply('Bado sijaandaa mkeka mwingine wa 10bet mpendwa.')
-        } else {
-            for (let m of mk) {
-                await bot.telegram.copyMessage(ctx.chat.id, imp.pzone, m.mid)
-                await delay(1000)
-            }
-        }
-
-    } catch (err) {
-        console.log(err.message)
     }
 })
 
