@@ -133,11 +133,11 @@ bot.command('/mkeka', async ctx => {
     try {
         let nairobi = new Date().toLocaleDateString('en-GB', { timeZone: 'Africa/Nairobi' })
         let keka = await mkekaMega.find({ date: nairobi })
-        let txt = `<b><u>🔥 Mkeka wa Leo [ ${nairobi} ]</u></b>\n\n\n`
+        let txt = `<b><u>🔥 Mkeka wa Leo [ ${nairobi} ]</u></b>\n\nChagua game zako tatu au nne twende sawa 🤑\n\n`
         let odds = 1
         if (keka) {
             for (let m of keka) {
-                txt = txt + `🕔 <b>${m.date},  ${m.time}</b>\n⚽️ <b>${m.match}</b>\n✅ <b>${m.bet}</b> \n\n\n`
+                txt = txt + `<i>🕔 ${m.date},  ${m.time}</i>\n⚽️ ${m.match}\n<b>✅ ${m.bet.replace(/team/g, '').replace(/1 - /g, '1-').replace(/2 - /g, '2-')}</b> <i>@${m.odds}</i> \n\n\n`
                 odds = (odds * m.odds).toFixed(2)
             }
 
@@ -161,7 +161,13 @@ bot.command('maelezo', async ctx=> {
 })
 
 bot.command('site', async ctx=> {
-    await ctx.reply(`Hello!, ukiona kimya tembelea site yangu ya mikeka https://mkekawaleo.com`)
+    await ctx.reply(`Hello!, ukiona kimya tembelea site yangu ya mikeka \nhttps://mkekawaleo.com`, {
+        reply_markup: {
+            inline_keyboard: [
+                [{text: 'Fungua Hapa', url: 'http://mkekawaleo.com'}]
+            ]
+        }
+    })
     .catch((err)=> console.log(err.message))
 })
 
