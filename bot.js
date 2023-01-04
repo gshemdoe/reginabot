@@ -133,7 +133,35 @@ bot.command('/mkeka', async ctx => {
     try {
         let nairobi = new Date().toLocaleDateString('en-GB', { timeZone: 'Africa/Nairobi' })
         let keka = await mkekaMega.find({ date: nairobi })
-        let txt = `<b><u>🔥 Mkeka wa Leo [ ${nairobi} ]</u></b>\n\nChagua game zako tatu au nne twende sawa 🤑\n\n`
+        let txt = `<b><u>🔥 Mkeka wa Leo [ ${nairobi} ]</u></b>\n\n\n`
+        let odds = 1
+        if (keka) {
+            for (let m of keka) {
+                txt = txt + `<i>🕔 ${m.date},  ${m.time}</i>\n⚽️ ${m.match}\n<b>✅ ${m.bet.replace(/team/g, '').replace(/1 - /g, '1-').replace(/2 - /g, '2-')}</b> <i>@${m.odds}</i> \n\n\n`
+                odds = (odds * m.odds).toFixed(2)
+            }
+
+            let gsb = 'https://track.africabetpartners.com/visit/?bta=35468&nci=5377'
+
+            let finaText = txt + `<b>🔥 Total Odds: ${odds}</b>\n\nOption hizi zinapatikana Gal Sport Betting pekee, kama bado huna account,\n\n<b>👤 Jisajili Hapa</b>\n<a href="${gsb}">https://m.gsb.co.tz/register\nhttps://m.gsb.co.tz/register</a>\n\n<u>Msaada </u>\nmsaada wa kuzielewa hizi option bonyeza <b>/maelezo</b>`
+
+            await ctx.reply(finaText, { parse_mode: 'HTML', disable_web_page_preview: true })
+        }
+    } catch (err) {
+        await bot.telegram.sendMessage(imp.shemdoe, err.message)
+            .catch((e) => console.log(e.message))
+        console.log(err.message)
+    }
+
+})
+
+bot.command('/wakesho', async ctx => {
+    try {
+        let d = new Date()
+        d.setDate(d.getDate() + 1)
+        let nairobi = d.toLocaleDateString('en-GB', { timeZone: 'Africa/Nairobi' })
+        let keka = await mkekaMega.find({ date: nairobi })
+        let txt = `<b><u>🔥 Mkeka wa Kesho [ ${nairobi} ]</u></b>\n\n\n`
         let odds = 1
         if (keka) {
             for (let m of keka) {
