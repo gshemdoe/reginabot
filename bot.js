@@ -51,7 +51,7 @@ const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms))
 bot.start(async ctx => {
     try {
         let typ = 'start command'
-        await ctx.reply('Hello karibu, tumia hizi commands: \n\n/mkeka - kupata mkeka wa Gal Sport \n/mkeka2 - kupata mkeka wa 10bet\n\nBonyeza <b>Menu</b> hapo chini kwa commands zingine.', { parse_mode: 'HTML' })
+        await ctx.reply('Hello karibu, tumia hii command: \n\n/mkeka - kupata mkeka wa leo.\n\nBonyeza <b>Menu</b> hapo chini kwa commands zingine.', { parse_mode: 'HTML' })
         create(bot, ctx, typ)
     } catch (err) {
         console.log(err.message)
