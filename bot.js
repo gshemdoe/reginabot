@@ -33,6 +33,8 @@ const imp = {
     mylove: -1001748858805
 }
 
+const gsb_ug = `https://track.africabetpartners.com/visit/?bta=35468&nci=5559`
+
 async function create(bot, ctx, type) {
     let starter = await nyumbuModel.findOne({ chatid: ctx.chat.id })
     if (!starter) {
@@ -361,7 +363,7 @@ bot.on('chat_join_request', async ctx => {
 
 bot.on('text', async ctx => {
     try {
-        if (ctx.message.reply_to_message && ctx.chat.id == imp.sh1xbet) {
+        if (ctx.message.reply_to_message && ctx.chat.id == imp.halot) {
             if (ctx.message.reply_to_message.text) {
                 let my_msg = ctx.message.text
                 let myid = ctx.chat.id
@@ -410,7 +412,7 @@ bot.on('text', async ctx => {
             let username = ctx.chat.first_name
             let mid = ctx.message.message_id
 
-            await bot.telegram.sendMessage(imp.sh1xbet, `<b>${txt}</b> \n\nfrom = <code>${username}</code>\nid = <code>${userid}</code>&mid=${mid}`, { parse_mode: 'HTML', disable_notification: true })
+            await bot.telegram.sendMessage(imp.halot, `<b>${txt}</b> \n\nfrom = <code>${username}</code>\nid = <code>${userid}</code>&mid=${mid}`, { parse_mode: 'HTML', disable_notification: true })
         }
 
     } catch (err) {
@@ -429,7 +431,7 @@ bot.on('photo', async ctx => {
         let chatid = ctx.chat.id
         let cap = ctx.message.caption
 
-        if (ctx.message.reply_to_message && chatid == imp.sh1xbet) {
+        if (ctx.message.reply_to_message && chatid == imp.halot) {
             if (ctx.message.reply_to_message.text) {
                 let umsg = ctx.message.reply_to_message.text
                 let ids = umsg.split('id = ')[1].trim()
@@ -457,7 +459,7 @@ bot.on('photo', async ctx => {
 
 
         else {
-            await bot.telegram.copyMessage(imp.sh1xbet, chatid, mid, {
+            await bot.telegram.copyMessage(imp.halot, chatid, mid, {
                 caption: cap + `\n\nfrom = <code>${username}</code>\nid = <code>${chatid}</code>&mid=${mid}`,
                 parse_mode: 'HTML'
             })
