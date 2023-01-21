@@ -249,6 +249,22 @@ bot.command('/post_to_channels', async ctx => {
     }
 })
 
+bot.command('/kujisajili', async ctx=> {
+    try {
+        await bot.telegram.copyMessage(ctx.chat.id, imp.pzone, 7595)
+    } catch (err) {
+        console.log(err.message)
+    }
+})
+
+bot.command('/kudeposit', async ctx=> {
+    try {
+        await bot.telegram.copyMessage(ctx.chat.id, imp.pzone, 7596)
+    } catch (err) {
+        console.log(err.message)
+    }
+})
+
 bot.on('channel_post', async ctx => {
     let txt = ctx.channelPost.text
     let txtid = ctx.channelPost.message_id
