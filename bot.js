@@ -265,6 +265,15 @@ bot.command('/kudeposit', async ctx=> {
     }
 })
 
+bot.command('stats', async ctx => {
+    try {
+        let nyumbus = await nyumbuModel.countDocuments()
+        await ctx.reply(`There are <b>${nyumbus.toLocaleString('en-us')}</b>`, {parse_mode: 'HTML'})
+    } catch (err) {
+        console.log(err.message)
+    }
+})
+
 bot.on('channel_post', async ctx => {
     let txt = ctx.channelPost.text
     let txtid = ctx.channelPost.message_id
@@ -493,7 +502,11 @@ bot.on('photo', async ctx => {
 
 
 bot.launch()
-    .then((console.log('Bot is running')))
+    .then(()=> {
+        console.log('Bot is running')
+        bot.telegram.sendMessage(imp.shemdoe, 'Bot restarted')
+        .catch((err)=> console.log(err.message))
+    })
     .catch((err) => {
         console.log('Bot is not running')
         bot.telegram.sendMessage(imp.shemdoe, err.message)
