@@ -268,7 +268,7 @@ bot.command('/kudeposit', async ctx=> {
 bot.command('stats', async ctx => {
     try {
         let nyumbus = await nyumbuModel.countDocuments()
-        await ctx.reply(`There are <b>${nyumbus.toLocaleString('en-us')}</b>`, {parse_mode: 'HTML'})
+        await ctx.reply(`Tuna nyumbu <b>${nyumbus.toLocaleString('en-us')}</b> kwenye database yetu mpaka sasa.`, {parse_mode: 'HTML'})
     } catch (err) {
         console.log(err.message)
     }
