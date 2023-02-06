@@ -7,6 +7,9 @@ const nyumbuSchema = new Schema({
     },
     username: {
         type: String
+    },
+    refferer: {
+        type: String
     }
 }, {strict: false, timestamps: true })
 

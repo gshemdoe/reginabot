@@ -40,7 +40,8 @@ async function create(bot, ctx, type) {
     if (!starter) {
         await nyumbuModel.create({
             chatid: ctx.chat.id,
-            username: ctx.chat.first_name
+            username: ctx.chat.first_name,
+            refferer: "Helen"
         })
         await bot.telegram.sendMessage(imp.shemdoe, `${ctx.chat.first_name} added to database with ${type}`)
     }
@@ -202,7 +203,7 @@ bot.command('site', async ctx=> {
 })
 
 bot.command('/sll', async ctx => {
-    await nyumbuModel.updateMany({}, { $set: { blocked: false } })
+    await nyumbuModel.updateMany({}, { $set: { refferer: "Helen" } })
     ctx.reply('Updated')
 })
 
