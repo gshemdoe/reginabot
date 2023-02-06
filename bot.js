@@ -41,7 +41,7 @@ async function create(bot, ctx, type) {
         await nyumbuModel.create({
             chatid: ctx.chat.id,
             username: ctx.chat.first_name,
-            refferer: "Helen"
+            refferer: "Regina"
         })
         await bot.telegram.sendMessage(imp.shemdoe, `${ctx.chat.first_name} added to database with ${type}`)
     }
@@ -68,7 +68,7 @@ bot.command('/broadcast', async ctx => {
     let msg_id = Number(txt.split('/broadcast-')[1].trim())
     if (myId == imp.shemdoe || myId == imp.halot) {
         try {
-            let all_users = await nyumbuModel.find({refferer: "Helen"})
+            let all_users = await nyumbuModel.find({refferer: "Regina"})
 
             all_users.forEach((u, index) => {
                 setTimeout(() => {
@@ -106,7 +106,7 @@ bot.command('/convo', async ctx => {
     let msg_id = Number(txt.split('/convo-')[1].trim())
     if (myId == imp.shemdoe || myId == imp.halot) {
         try {
-            let all_users = await nyumbuModel.find({refferer: "Helen"})
+            let all_users = await nyumbuModel.find({refferer: "Regina"})
 
             all_users.forEach((u, index) => {
                 if (u.blocked != true) {
@@ -203,7 +203,7 @@ bot.command('site', async ctx=> {
 })
 
 bot.command('/sll', async ctx => {
-    await nyumbuModel.updateMany({}, { $set: { refferer: "Helen" } })
+    await nyumbuModel.updateMany({}, { $set: { refferer: "Regina" } })
     ctx.reply('Updated')
 })
 
@@ -270,7 +270,8 @@ bot.command('stats', async ctx => {
     try {
         let nyumbusH = await nyumbuModel.countDocuments({refferer: "Helen"})
         let nyumbusR = await nyumbuModel.countDocuments({refferer: "Regina"})
-        await ctx.reply(`Mpaka sasa kwenye Database yetu tuna nyumbu <b>${nyumbusH.toLocaleString('en-us')}</b> wa Helen na nyumbu <b>${nyumbusH.toLocaleString('en-us')}</b> wa Regina.`, {parse_mode: 'HTML'})
+        let jumla = nyumbusH + nyumbusR
+        await ctx.reply(`Mpaka sasa kwenye Database yetu tuna nyumbu <b>${nyumbusH.toLocaleString('en-us')}</b> wa Helen na nyumbu <b>${nyumbusR.toLocaleString('en-us')}</b> wa Regina.\n\nJumla kuu ni <b>${jumla.toLocaleString('en-us')}</b>`, {parse_mode: 'HTML'})
     } catch (err) {
         console.log(err.message)
     }
@@ -364,7 +365,7 @@ bot.on('chat_join_request', async ctx => {
 
         let nyumbu = await nyumbuModel.findOne({ chatid })
         if (!nyumbu) {
-            await nyumbuModel.create({ chatid, username, blocked: false, refferer: "Helen" })
+            await nyumbuModel.create({ chatid, username, blocked: false, refferer: "Regina" })
         }
         await bot.telegram.approveChatJoinRequest(cha_id, chatid)
         await bot.telegram.sendMessage(chatid, `Hi <b>${username}</b> \nHongera 🎉 ombi lako la kujiunga na channel yetu <b>${title}</b> limekubaliwa, karibu sana.`, {
