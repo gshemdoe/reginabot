@@ -271,7 +271,7 @@ bot.command('stats', async ctx => {
         let nyumbusH = await nyumbuModel.countDocuments({refferer: "Helen"})
         let nyumbusR = await nyumbuModel.countDocuments({refferer: "Regina"})
         let jumla = nyumbusH + nyumbusR
-        await ctx.reply(`Mpaka sasa kwenye Database yetu tuna nyumbu <b>${nyumbusH.toLocaleString('en-us')}</b> wa Helen na nyumbu <b>${nyumbusR.toLocaleString('en-us')}</b> wa Regina.\n\nJumla kuu ni <b>${jumla.toLocaleString('en-us')}</b>`, {parse_mode: 'HTML'})
+        await ctx.reply(`Mpaka sasa kwenye Database yetu tuna nyumbu <b>${nyumbusH.toLocaleString('en-us')}</b> wa Helen na nyumbu <b>${nyumbusR.toLocaleString('en-us')}</b> wa Regina.\n\nJumla kuu ni <b>${jumla.toLocaleString('en-us')}</b>. \n\nWote unique, kama tayari mmoja wetu kamuongeza mimi simuongezi.`, {parse_mode: 'HTML'})
     } catch (err) {
         console.log(err.message)
     }
