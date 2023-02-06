@@ -68,7 +68,7 @@ bot.command('/broadcast', async ctx => {
     let msg_id = Number(txt.split('/broadcast-')[1].trim())
     if (myId == imp.shemdoe || myId == imp.halot) {
         try {
-            let all_users = await nyumbuModel.find()
+            let all_users = await nyumbuModel.find({refferer: "Helen"})
 
             all_users.forEach((u, index) => {
                 setTimeout(() => {
@@ -106,7 +106,7 @@ bot.command('/convo', async ctx => {
     let msg_id = Number(txt.split('/convo-')[1].trim())
     if (myId == imp.shemdoe || myId == imp.halot) {
         try {
-            let all_users = await nyumbuModel.find()
+            let all_users = await nyumbuModel.find({refferer: "Helen"})
 
             all_users.forEach((u, index) => {
                 if (u.blocked != true) {
@@ -268,8 +268,9 @@ bot.command('/kudeposit', async ctx=> {
 
 bot.command('stats', async ctx => {
     try {
-        let nyumbus = await nyumbuModel.countDocuments()
-        await ctx.reply(`Tuna nyumbu <b>${nyumbus.toLocaleString('en-us')}</b> kwenye database yetu mpaka sasa.`, {parse_mode: 'HTML'})
+        let nyumbusH = await nyumbuModel.countDocuments({refferer: "Helen"})
+        let nyumbusR = await nyumbuModel.countDocuments({refferer: "Regina"})
+        await ctx.reply(`Mpaka sasa kwenye Database yetu tuna nyumbu <b>${nyumbusH.toLocaleString('en-us')}</b> wa Helen na nyumbu <b>${nyumbusH.toLocaleString('en-us')}</b> wa Regina.`, {parse_mode: 'HTML'})
     } catch (err) {
         console.log(err.message)
     }
@@ -363,7 +364,7 @@ bot.on('chat_join_request', async ctx => {
 
         let nyumbu = await nyumbuModel.findOne({ chatid })
         if (!nyumbu) {
-            await nyumbuModel.create({ chatid, username, blocked: false })
+            await nyumbuModel.create({ chatid, username, blocked: false, refferer: "Helen" })
         }
         await bot.telegram.approveChatJoinRequest(cha_id, chatid)
         await bot.telegram.sendMessage(chatid, `Hi <b>${username}</b> \nHongera 🎉 ombi lako la kujiunga na channel yetu <b>${title}</b> limekubaliwa, karibu sana.`, {
