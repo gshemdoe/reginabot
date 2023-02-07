@@ -373,7 +373,7 @@ bot.on('chat_join_request', async ctx => {
         }).catch( async(error)=> {
             if(error.message.includes(`can't initiate conversation`)) {
                 await ctx.approveChatJoinRequest(chatid).catch(e => console.log(e.message))
-                await bot.telegram.sendMessage(imp.shemdoe, 'I failed to start convo so I approve him regardless')
+                await bot.telegram.sendMessage(imp.shemdoe, `I failed to start convo with ${username} so I approve him regardless`)
                 .catch(ee => console.log(ee.message))
             }
         })
