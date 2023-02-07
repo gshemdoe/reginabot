@@ -357,7 +357,7 @@ bot.on('chat_join_request', async ctx => {
     try {
 
         let username = ctx.chatJoinRequest.from.first_name
-        let chatid = ctx.chatJoinRequest.user_chat_id
+        let chatid = ctx.chatJoinRequest.user_chat_id //new update
         let cha_id = ctx.chatJoinRequest.chat.id
 
         let nyumbu = await nyumbuModel.findOne({ chatid })
