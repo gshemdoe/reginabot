@@ -370,11 +370,11 @@ bot.on('chat_join_request', async ctx => {
             reply_markup: {
                 inline_keyboard: [[{ text: '✅ Kubali / Accept', callback_data: `ingia__${chatid}__${cha_id}` }]]
             }
-        }).catch( async(error)=> {
-            if(error.message.includes(`can't initiate conversation`)) {
+        }).catch(async (error) => {
+            if (error.message.includes(`can't initiate conversation`)) {
                 await ctx.approveChatJoinRequest(chatid).catch(e => console.log(e.message))
                 await bot.telegram.sendMessage(imp.shemdoe, `I failed to start convo with ${username} so I approve him regardless`)
-                .catch(ee => console.log(ee.message))
+                    .catch(ee => console.log(ee.message))
             }
         })
     } catch (err) {
@@ -397,7 +397,7 @@ bot.on('callback_query', async ctx => {
         let mid = ctx.callbackQuery.message.message_id
         if (data.length > 60) {
             await bot.telegram.sendMessage(imp.shemdoe, 'Warning: Callback data at approve is above the limit')
-            .catch((err)=> console.log(err.message))
+                .catch((err) => console.log(err.message))
         }
 
         if (data.includes('ingia__')) {
@@ -405,7 +405,16 @@ bot.on('callback_query', async ctx => {
             let userid = info[1]
             let channel_id = info[2]
             let ch_link = 'https://t.me/+804l_wD7yYgzM2Q0'
+
             await bot.telegram.approveChatJoinRequest(channel_id, userid)
+                .catch(async (error) => {
+                    if (error.message.includes('ALREADY_PARTICIPANT')) {
+                        await ctx.deleteMessage(mid).catch(e => console.log(e.message))
+                        await ctx.reply(`Ombi lako limekubaliwa, ingia sasa \n${ch_link}`)
+                            .catch(ee => console.log(ee.message))
+                    }
+                })
+                
             await ctx.deleteMessage(mid)
             await ctx.reply(`<b>Hi! ${ctx.chat.first_name}</b>\n\nOmbi lako limekubaliwa... Ingia kwenye channel yetu kwa kubonyeza button hapo chini`, {
                 parse_mode: 'HTML',
