@@ -68,7 +68,7 @@ bot.command('/broadcast', async ctx => {
     let msg_id = Number(txt.split('/broadcast-')[1].trim())
     if (myId == imp.shemdoe || myId == imp.halot) {
         try {
-            let all_users = await nyumbuModel.find({refferer: "Regina"})
+            let all_users = await nyumbuModel.find({ refferer: "Regina" })
 
             all_users.forEach((u, index) => {
                 setTimeout(() => {
@@ -106,7 +106,7 @@ bot.command('/convo', async ctx => {
     let msg_id = Number(txt.split('/convo-')[1].trim())
     if (myId == imp.shemdoe || myId == imp.halot) {
         try {
-            let all_users = await nyumbuModel.find({refferer: "Regina"})
+            let all_users = await nyumbuModel.find({ refferer: "Regina" })
 
             all_users.forEach((u, index) => {
                 if (u.blocked != true) {
@@ -186,20 +186,20 @@ bot.command('/wakesho', async ctx => {
 
 })
 
-bot.command('maelezo', async ctx=> {
+bot.command('maelezo', async ctx => {
     await bot.telegram.copyMessage(ctx.chat.id, imp.pzone, 7567)
-    .catch((err)=> console.log(err.message))
+        .catch((err) => console.log(err.message))
 })
 
-bot.command('site', async ctx=> {
+bot.command('site', async ctx => {
     await ctx.reply(`Hello!, ukiona kimya tembelea site yangu ya mikeka \nhttps://mkekawaleo.com`, {
         reply_markup: {
             inline_keyboard: [
-                [{text: 'Fungua Hapa', url: 'http://mkekawaleo.com'}]
+                [{ text: 'Fungua Hapa', url: 'http://mkekawaleo.com' }]
             ]
         }
     })
-    .catch((err)=> console.log(err.message))
+        .catch((err) => console.log(err.message))
 })
 
 bot.command('/sll', async ctx => {
@@ -250,7 +250,7 @@ bot.command('/post_to_channels', async ctx => {
     }
 })
 
-bot.command('/kujisajili', async ctx=> {
+bot.command('/kujisajili', async ctx => {
     try {
         await bot.telegram.copyMessage(ctx.chat.id, imp.pzone, 7595)
     } catch (err) {
@@ -258,7 +258,7 @@ bot.command('/kujisajili', async ctx=> {
     }
 })
 
-bot.command('/kudeposit', async ctx=> {
+bot.command('/kudeposit', async ctx => {
     try {
         await bot.telegram.copyMessage(ctx.chat.id, imp.pzone, 7596)
     } catch (err) {
@@ -268,10 +268,10 @@ bot.command('/kudeposit', async ctx=> {
 
 bot.command('stats', async ctx => {
     try {
-        let nyumbusH = await nyumbuModel.countDocuments({refferer: "Helen"})
-        let nyumbusR = await nyumbuModel.countDocuments({refferer: "Regina"})
+        let nyumbusH = await nyumbuModel.countDocuments({ refferer: "Helen" })
+        let nyumbusR = await nyumbuModel.countDocuments({ refferer: "Regina" })
         let jumla = nyumbusH + nyumbusR
-        await ctx.reply(`Mpaka sasa kwenye Database yetu tuna nyumbu <b>${nyumbusH.toLocaleString('en-us')}</b> wa Helen na nyumbu <b>${nyumbusR.toLocaleString('en-us')}</b> wa Regina.\n\nJumla kuu ni <b>${jumla.toLocaleString('en-us')}</b>. \n\nWote unique, kama tayari mmoja wetu kamuongeza mimi simuongezi.`, {parse_mode: 'HTML'})
+        await ctx.reply(`Mpaka sasa kwenye Database yetu tuna nyumbu <b>${nyumbusH.toLocaleString('en-us')}</b> wa Helen na nyumbu <b>${nyumbusR.toLocaleString('en-us')}</b> wa Regina.\n\nJumla kuu ni <b>${jumla.toLocaleString('en-us')}</b>. \n\nWote unique, kama tayari mmoja wetu kamuongeza mimi simuongezi.`, { parse_mode: 'HTML' })
     } catch (err) {
         console.log(err.message)
     }
@@ -359,33 +359,59 @@ bot.on('chat_join_request', async ctx => {
         let username = ctx.chatJoinRequest.from.first_name
         let chatid = ctx.chatJoinRequest.from.id
         let cha_id = ctx.chatJoinRequest.chat.id
-        let title = ctx.chatJoinRequest.chat.title
-        let info = await bot.telegram.getChat(cha_id)
-        let invite_link = info.invite_link
 
         let nyumbu = await nyumbuModel.findOne({ chatid })
         if (!nyumbu) {
             await nyumbuModel.create({ chatid, username, blocked: false, refferer: "Regina" })
         }
-        await bot.telegram.approveChatJoinRequest(cha_id, chatid)
-        await bot.telegram.sendMessage(chatid, `Hi <b>${username}</b> \nHongera 🎉 ombi lako la kujiunga na channel yetu <b>${title}</b> limekubaliwa, karibu sana.`, {
-            parse_mode: 'HTML',
+
+        await bot.telegram.copyMessage(chatid, imp.pzone, 7617, {
             reply_markup: {
-                inline_keyboard: [[{ text: 'Ingia sasa', url: invite_link }]]
+                inline_keyboard: [[{ text: '✅ Kubali / Accept', callback_data: `ingia__${chatid}__${cha_id}` }]]
             }
         })
-
     } catch (err) {
         console.log(err)
         if (!err.message) {
             if (!err.description.includes('bot was blocked') && !err.description.includes('USER_ALREADY')) {
-                await bot.telegram.sendMessage(imp.shemdoe, err.description)
+                await bot.telegram.sendMessage(imp.shemdoe, `(${ctx.chatJoinRequest.from.first_name}), "${err.description}"`)
             }
         } else {
             if (!err.message.includes('bot was blocked') && !err.message.includes('USER_ALREADY')) {
-                await bot.telegram.sendMessage(imp.shemdoe, err.message)
+                await bot.telegram.sendMessage(imp.shemdoe, `(${ctx.chatJoinRequest.from.first_name}), "${err.message}"`)
             }
         }
+    }
+})
+
+bot.on('callback_query', async ctx => {
+    try {
+        let data = ctx.callbackQuery.data
+        let mid = ctx.callbackQuery.message.message_id
+        if (data.length > 60) {
+            await bot.telegram.sendMessage(imp.shemdoe, 'Warning: Callback data at approve is above the limit')
+            .catch((err)=> console.log(err.message))
+        }
+
+        if (data.includes('ingia__')) {
+            let info = data.split('__')
+            let userid = info[1]
+            let channel_id = info[2]
+            let ch_link = 'https://t.me/+804l_wD7yYgzM2Q0'
+            await bot.telegram.approveChatJoinRequest(channel_id, userid)
+            await ctx.deleteMessage(mid)
+            await ctx.reply(`<b>Hi! ${ctx.chat.first_name}</b>\n\nOmbi lako limekubaliwa... Ingia kwenye channel yetu kwa kubonyeza button hapo chini`, {
+                parse_mode: 'HTML',
+                reply_markup: {
+                    inline_keyboard: [
+                        [{ text: '✅ Ingia Sasa', url: ch_link }]
+                    ]
+                }
+            })
+        }
+    } catch (err) {
+        await bot.telegram.sendMessage(imp.shemdoe, `(${ctx.chat.first_name}), "${err.message}"`)
+            .catch((err) => console.log(err.message))
     }
 })
 
@@ -505,10 +531,10 @@ bot.on('photo', async ctx => {
 
 
 bot.launch()
-    .then(()=> {
+    .then(() => {
         console.log('Bot is running')
         bot.telegram.sendMessage(imp.shemdoe, 'Bot restarted')
-        .catch((err)=> console.log(err.message))
+            .catch((err) => console.log(err.message))
     })
     .catch((err) => {
         console.log('Bot is not running')
