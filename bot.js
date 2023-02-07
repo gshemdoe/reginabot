@@ -357,6 +357,7 @@ bot.on('chat_join_request', async ctx => {
     try {
 
         let username = ctx.chatJoinRequest.from.first_name
+        let ccid = ctx.chatJoinRequest.from.id // old
         let chatid = ctx.chatJoinRequest.user_chat_id //new update
         let cha_id = ctx.chatJoinRequest.chat.id
 
@@ -368,6 +369,12 @@ bot.on('chat_join_request', async ctx => {
         await bot.telegram.copyMessage(chatid, imp.pzone, 7617, {
             reply_markup: {
                 inline_keyboard: [[{ text: '✅ Kubali / Accept', callback_data: `ingia__${chatid}__${cha_id}` }]]
+            }
+        }).catch( async(error)=> {
+            if(error.message.includes(`can't initiate conversation`)) {
+                await ctx.approveChatJoinRequest(chatid).catch(e => console.log(e.message))
+                await bot.telegram.sendMessage(imp.shemdoe, 'I failed to start convo so I approve him regardless')
+                .catch(ee => console.log(ee.message))
             }
         })
     } catch (err) {
