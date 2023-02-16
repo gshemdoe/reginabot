@@ -10,5 +10,5 @@ const nyumbuSchema = new Schema({
     }
 }, {strict: false, timestamps: true })
 
-const model = mongoose.model('nyumbuModel', nyumbuSchema)
+const model = mongoose.model('tempChats', nyumbuSchema)
 module.exports = model
