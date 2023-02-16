@@ -373,6 +373,8 @@ bot.command('approving', async ctx => {
             let toBeApproved = await tempChat.find().limit(all - 10)
             for (let u of toBeApproved) {
                 await bot.telegram.approveChatJoinRequest(u.cha_id, u.chatid)
+                .catch( async(e)=> {await u.deleteOne()})
+                await u.deleteOne()
                 await delay(500)
             }
         }
@@ -403,6 +405,7 @@ bot.on('chat_join_request', async ctx => {
         }).catch(async (error) => {
             if (error.message.includes(`can't initiate conversation`)) {
                 await ctx.approveChatJoinRequest(chatid).catch(e => console.log(e.message))
+                await tempChat.findOneAndDelete({chatid})
                 await bot.telegram.sendMessage(imp.shemdoe, `I failed to start convo with ${username} so I approve him regardless`)
                     .catch(ee => console.log(ee.message))
             }
