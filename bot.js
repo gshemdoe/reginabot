@@ -374,6 +374,7 @@ bot.command('approving', async ctx => {
             for (let u of toBeApproved) {
                 await bot.telegram.approveChatJoinRequest(u.cha_id, u.chatid)
                 .catch( async(e)=> {await u.deleteOne()})
+                console.log(u.chatid + ' approved')
                 await u.deleteOne()
                 await delay(500)
             }
