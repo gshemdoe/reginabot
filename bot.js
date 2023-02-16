@@ -1,6 +1,7 @@
 const { Telegraf } = require('telegraf')
 require('dotenv').config()
 const nyumbuModel = require('./database/chats')
+const tempChat = require('./database/temp-req')
 const my_channels_db = require('./database/my_channels')
 const mkekadb = require('./database/mkeka')
 const vidb = require('./database/db')
@@ -144,11 +145,11 @@ bot.command('/mkeka', async ctx => {
                 odds = (odds * m.odds).toFixed(2)
             }
 
-            let gsb = 'https://go.aff.10betafrica.com/ys6tiwg4'
+            let gsb = 'https://track.africabetpartners.com/visit/?bta=35468&nci=5439'
             let ke = `https://go.aff.10betafrica.com/m2iyvtvv`
-            let ug = 'https://track.africabetpartners.com/visit/?bta=35468&brand=gsb'
+            let ug = 'https://track.africabetpartners.com/visit/?bta=35468&nci=5740'
 
-            let finaText = txt + `<b>🔥 Total Odds: ${odds}</b>\n\n▬▬▬▬▬▬▬▬▬▬▬▬\n\nOption hizi zinapatikana 10bet, kama bado huna account,\n\n<b>👤 Jisajili Hapa (TZ 🇹🇿)</b>\n<a href="${gsb}">https://10bet.co.tz/register\nhttps://10bet.co.tz/register</a>\n\n---\n\n<b>👤 (KE 🇰🇪)</b>\n<a href="${ke}">https://10bet.co.ke/register</a>\n---\n<b>👤 (UG 🇺🇬)</b>\n<a href="${ug}">https://gsb.ug/register</a>\n\n<u>Msaada </u>\nmsaada wa kuzielewa hizi option bonyeza <b>/maelezo</b>`
+            let finaText = txt + `<b>🔥 Total Odds: ${odds}</b>\n\n▬▬▬▬▬▬▬▬▬▬▬▬\n\nOption hizi zinapatikana 10bet, kama bado huna account,\n\n<b>✓ Jisajili Hapa \n\n👤 (Tanzania 🇹🇿)</b>\n<a href="${gsb}">https://10bet.co.tz/register\nhttps://10bet.co.tz/register</a>\n▬\n<b>👤 (Kenya 🇰🇪)</b>\n<a href="${ke}">https://10bet.co.ke/register</a>\n▬\n<b>👤 (Uganda 🇺🇬)</b>\n<a href="${ug}">https://gsb.ug/register</a>\n\n<u>Msaada </u>\nmsaada wa kuzielewa hizi option bonyeza <b>/maelezo</b>`
 
             await ctx.reply(finaText, { parse_mode: 'HTML', disable_web_page_preview: true })
         }
@@ -355,6 +356,31 @@ bot.command('wakubwa', async ctx => {
     }
 })
 
+bot.command('/pending', async ctx => {
+    try {
+        let baki = await tempChat.countDocuments()
+        await ctx.reply('Tuna requests ' + baki)
+    } catch (err) {
+        console.log(err.message)
+    }
+})
+
+bot.command('approving', async ctx => {
+    let man = ctx.chat.id
+    try {
+        if (man == imp.halot || man == imp.shemdoe) {
+            let all = await tempChat.countDocuments()
+            let toBeApproved = await tempChat.find().limit(all - 10)
+            for (let u of toBeApproved) {
+                await bot.telegram.approveChatJoinRequest(u.cha_id, u.chatid)
+                await delay(1000)
+            }
+        }
+    } catch (err) {
+        console.log(err.message)
+    }
+})
+
 bot.on('chat_join_request', async ctx => {
     try {
 
@@ -367,6 +393,8 @@ bot.on('chat_join_request', async ctx => {
         if (!nyumbu) {
             await nyumbuModel.create({ chatid, username, blocked: false, refferer: "Regina" })
         }
+
+        await tempChat.create({ chatid, cha_id })
 
         await bot.telegram.copyMessage(chatid, imp.pzone, 7617, {
             reply_markup: {
@@ -416,7 +444,9 @@ bot.on('callback_query', async ctx => {
                             .catch(ee => console.log(ee.message))
                     }
                 })
-                
+
+            await tempChat.findOneAndDelete({ chatid: Number(userid) })
+            console.log('pending deleted')
             await ctx.deleteMessage(mid)
             await ctx.reply(`<b>Hi! ${ctx.chat.first_name}</b>\n\nOmbi lako limekubaliwa... Ingia kwenye channel yetu kwa kubonyeza button hapo chini`, {
                 parse_mode: 'HTML',
