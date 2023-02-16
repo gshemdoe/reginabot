@@ -373,7 +373,7 @@ bot.command('approving', async ctx => {
             let toBeApproved = await tempChat.find().limit(all - 10)
             for (let u of toBeApproved) {
                 await bot.telegram.approveChatJoinRequest(u.cha_id, u.chatid)
-                await delay(1000)
+                await delay(500)
             }
         }
     } catch (err) {
