@@ -22,6 +22,7 @@ mongoose.connect(`mongodb://${process.env.USER}:${process.env.PASS}@nodetuts-sha
 const imp = {
     replyDb: -1001608248942,
     pzone: -1001352114412,
+    rpzone: -1001549769969,
     prem_channel: -1001470139866,
     local_domain: 't.me/rss_shemdoe_bot?start=',
     prod_domain: 't.me/ohmychannelV2bot?start=',
@@ -76,7 +77,7 @@ bot.command('/broadcast', async ctx => {
                     if (index == all_users.length - 1) {
                         ctx.reply('Nimemaliza kutuma offer')
                     }
-                    bot.telegram.copyMessage(u.chatid, imp.pzone, msg_id, {
+                    bot.telegram.copyMessage(u.chatid, imp.rpzone, msg_id, {
                         reply_markup: {
                             inline_keyboard: [
                                 [
@@ -115,7 +116,7 @@ bot.command('/convo', async ctx => {
                         if (index == all_users.length - 1) {
                             ctx.reply('Nimemaliza conversation')
                         }
-                        bot.telegram.copyMessage(u.chatid, imp.pzone, msg_id)
+                        bot.telegram.copyMessage(u.chatid, imp.rpzone, msg_id)
                             .then(() => console.log('convo sent to ' + u.chatid))
                             .catch((err) => {
                                 if (err.message.includes('blocked') || err.message.includes('initiate')) {
