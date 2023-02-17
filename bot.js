@@ -377,7 +377,7 @@ bot.command('approving', async ctx => {
                 .catch( async(e)=> {await u.deleteOne()})
                 console.log(u.chatid + ' approved')
                 await u.deleteOne()
-                await delay(40)
+                await delay(100)
             }
         }
     } catch (err) {
