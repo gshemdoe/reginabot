@@ -4,6 +4,7 @@ const nyumbuModel = require('./database/chats')
 const tempChat = require('./database/temp-req')
 const my_channels_db = require('./database/my_channels')
 const mkekadb = require('./database/mkeka')
+const tg_slips = require('./database/tg_slips')
 const vidb = require('./database/db')
 const mkekaMega = require('./database/mkeka-mega')
 const mongoose = require('mongoose')
@@ -32,6 +33,7 @@ const imp = {
     xzone: -1001740624527,
     ohmyDB: -1001586042518,
     xbongo: -1001263624837,
+    mikekaDB: -1001696592315,
     mylove: -1001748858805
 }
 
@@ -53,10 +55,10 @@ async function create(bot, ctx, type) {
 const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms))
 
 
-bot.start(async ctx => {
+bot.command(['start', 'help', '/stop'], async ctx => {
     try {
         let typ = 'start command'
-        await ctx.reply('Hello karibu, tumia hii command: \n\n/mkeka - kupata mkeka wa leo.\n\nBonyeza <b>Menu</b> hapo chini kwa commands zingine.', { parse_mode: 'HTML' })
+        await bot.telegram.copyMessage(ctx.chat.id, imp.pzone, 7653)
         create(bot, ctx, typ)
     } catch (err) {
         console.log(err.message)
@@ -134,7 +136,47 @@ bot.command('/convo', async ctx => {
 
 })
 
-bot.command('/mkeka', async ctx => {
+bot.command(['mkeka', 'mkeka1'], async ctx=> {
+    try {
+        let td = new Date().toLocaleDateString('en-GB', {timeZone: 'Africa/Nairobi'})
+        let mk = await tg_slips.findOne({siku: td, brand: 'gsb'})
+        if(mk) {
+            await ctx.sendChatAction('upload_photo')
+            await delay(2000)
+            await bot.telegram.copyMessage(ctx.chat.id, imp.mikekaDB, mk.mid)
+        } else {
+            await ctx.sendChatAction('typing')
+            await delay(2000)
+            await ctx.reply('Subiri kidogo, bado tunaandaa mikeka ya leo.')
+        }
+    } catch (err) {
+        console.log(err)
+        await bot.telegram.sendMessage(imp.shemdoe, err.message)
+        .catch(e => console.log(e.message))
+    }
+})
+
+bot.command('mkeka2', async ctx=> {
+    try {
+        let td = new Date().toLocaleDateString('en-GB', {timeZone: 'Africa/Nairobi'})
+        let mk = await tg_slips.findOne({siku: td, brand: 'meridian'})
+        if(mk) {
+            await ctx.sendChatAction('upload_photo')
+            await delay(2000)
+            await bot.telegram.copyMessage(ctx.chat.id, imp.mikekaDB, mk.mid)
+        } else {
+            await ctx.sendChatAction('typing')
+            await delay(2000)
+            await ctx.reply('Subiri kidogo, bado tunaandaa mikeka ya leo.')
+        }
+    } catch (err) {
+        console.log(err)
+        await bot.telegram.sendMessage(imp.shemdoe, err.message)
+        .catch(e => console.log(e.message))
+    }
+})
+
+bot.command('/mkeka3', async ctx => {
     try {
         let nairobi = new Date().toLocaleDateString('en-GB', { timeZone: 'Africa/Nairobi' })
         let keka = await mkekaMega.find({ date: nairobi })
@@ -155,9 +197,9 @@ bot.command('/mkeka', async ctx => {
             await ctx.reply(finaText, { parse_mode: 'HTML', disable_web_page_preview: true })
         } else {
             await ctx.sendChatAction('typing')
-            setTimeout(()=> {
+            setTimeout(() => {
                 ctx.reply('Mkeka wa leo bado sijauandaa... ndo niko kwenye maandalizi hadi baadae kidogo utakuwa tayari.')
-                .catch(e=> console.log(e.message))
+                    .catch(e => console.log(e.message))
             }, 1000)
         }
     } catch (err) {
@@ -287,6 +329,14 @@ bot.command('stats', async ctx => {
     }
 })
 
+bot.command(['jisajili_m', 'deposit_m'], async ctx => {
+    try {
+        await bot.telegram.copyMessage(ctx.chat.id, imp.pzone, 7652)
+    } catch (err) {
+        console.log(err.message)
+    }
+})
+
 bot.on('channel_post', async ctx => {
     let txt = ctx.channelPost.text
     let txtid = ctx.channelPost.message_id
@@ -316,16 +366,17 @@ bot.on('channel_post', async ctx => {
             }
         }
 
-        if (ctx.channelPost.reply_to_message && ctx.channelPost.chat.id == imp.pzone) {
+        // for regina only
+        if (ctx.channelPost.reply_to_message && ctx.channelPost.chat.id == imp.mikekaDB) {
             let rp_id = ctx.channelPost.reply_to_message.message_id
             let rp_msg = ctx.channelPost.reply_to_message.text
 
-            if (txt.toLowerCase() == 'post gal') {
-                await mkekadb.create({ mid: rp_id, brand: 'gal' })
-                await ctx.reply('Mkeka uko live Gal Sport')
-            } else if (txt.toLowerCase() == 'post 10bet') {
-                await mkekadb.create({ mid: rp_id, brand: '10bet' })
-                await ctx.reply('Mkeka uko live 10bet')
+            if (txt.includes(' - ')) {
+                let data = txt.split(' - ')
+                await tg_slips.create({ brand: data[0].toLowerCase(), siku: data[1] + '/2023', mid: rp_id })
+                let info = await ctx.reply('Mkeka posted', { reply_to_message_id: rp_id })
+                await delay(1000)
+                await ctx.deleteMessage(info.message_id)
             }
         }
 
@@ -350,7 +401,7 @@ bot.command('send', async ctx => {
     }
 })
 
-bot.command('wakubwa', async ctx => {
+bot.command(['wakubwa', 'sodoma', 'sex', 'wadogo'], async ctx => {
     try {
         let idadi = await vidb.countDocuments()
         let rand = Math.floor(Math.random() * idadi)
@@ -380,7 +431,7 @@ bot.command('approving', async ctx => {
             let toBeApproved = await tempChat.find().limit(all - 10)
             for (let u of toBeApproved) {
                 await bot.telegram.approveChatJoinRequest(u.cha_id, u.chatid)
-                .catch( async(e)=> {await u.deleteOne()})
+                    .catch(async (e) => { await u.deleteOne() })
                 console.log(u.chatid + ' approved')
                 await u.deleteOne()
                 await delay(40)
@@ -413,7 +464,7 @@ bot.on('chat_join_request', async ctx => {
         }).catch(async (error) => {
             if (error.message.includes(`can't initiate conversation`)) {
                 await ctx.approveChatJoinRequest(chatid).catch(e => console.log(e.message))
-                await tempChat.findOneAndDelete({chatid})
+                await tempChat.findOneAndDelete({ chatid })
                 await bot.telegram.sendMessage(imp.shemdoe, `I failed to start convo with ${username} so I approve him regardless`)
                     .catch(ee => console.log(ee.message))
             }
