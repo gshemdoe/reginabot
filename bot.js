@@ -34,6 +34,7 @@ const imp = {
     ohmyDB: -1001586042518,
     xbongo: -1001263624837,
     mikekaDB: -1001696592315,
+    logsBin: -1001845473074,
     mylove: -1001748858805
 }
 
@@ -56,21 +57,30 @@ const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms))
 
 bot.start(async ctx => {
     try {
-        //add to database
-        await create(bot, ctx)
-
         if (ctx.startPayload) {
             let pload = ctx.startPayload
             if (pload == 'ngono_bongo') {
-                console.log('Ngono Payload')
+                console.log('Ngono Payload Started')
                 await bot.telegram.copyMessage(ctx.chat.id, imp.pzone, 7617, {
                     reply_markup: {
                         inline_keyboard: [[{ text: '✅ Kubali / Accept', callback_data: `accept_pload` }]]
                     }
                 })
             }
+            //add to database
+            await create(bot, ctx)
+
         } else {
             await bot.telegram.copyMessage(ctx.chat.id, imp.pzone, 7653)
+            let stt = await nyumbuModel.findOne({ chatid: ctx.chat.id })
+            if (!stt) {
+                await nyumbuModel.create({
+                    chatid: ctx.chat.id,
+                    username: ctx.chat.first_name,
+                    refferer: "Regina"
+                })
+                await bot.telegram.sendMessage(imp.logsBin, '(Regi) New user found me - Added to DB')
+            }
         }
 
     } catch (err) {
@@ -394,11 +404,11 @@ bot.action(['jisajili_m', 'deposit_m'], async ctx => {
     }
 })
 
-bot.action('accept_pload', async ctx=> {
+bot.action('accept_pload', async ctx => {
     let pload_link = `https://t.me/+PWiPWm0vB5Y4ZDhk`
     let org_msg_id = ctx.callbackQuery.message.message_id
     await ctx.deleteMessage(org_msg_id)
-    await ctx.reply(`Hongera 👏 Ombi lako la kujiunga na channel yetu limekubaliwa\n\n🔞 <b>Ingia Sasa\n${pload_link}\n${pload_link}</b>`, {parse_mode: 'HTML'})
+    await ctx.reply(`Hongera 👏 Ombi lako la kujiunga na channel yetu limekubaliwa\n\n🔞 <b>Ingia Sasa\n${pload_link}\n${pload_link}</b>`, { parse_mode: 'HTML' })
 })
 
 bot.on('channel_post', async ctx => {
