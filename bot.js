@@ -163,7 +163,13 @@ bot.command('mkeka2', async ctx=> {
         if(mk) {
             await ctx.sendChatAction('upload_photo')
             await delay(1000)
-            await bot.telegram.copyMessage(ctx.chat.id, imp.mikekaDB, mk.mid)
+            await bot.telegram.copyMessage(ctx.chat.id, imp.mikekaDB, mk.mid, {
+                reply_markup: {
+                    inline_keyboard: [
+                        [ {text: '💡 Msaada Betbuilder', callback_data: 'betbuilder'} ]
+                    ]
+                }
+            })
         } else {
             await ctx.sendChatAction('typing')
             await delay(2000)
@@ -332,6 +338,22 @@ bot.command('stats', async ctx => {
 bot.command(['jisajili_m', 'deposit_m'], async ctx => {
     try {
         await bot.telegram.copyMessage(ctx.chat.id, imp.pzone, 7652)
+    } catch (err) {
+        console.log(err.message)
+    }
+})
+
+bot.command('betbuilder', async ctx => {
+    try {
+        await bot.telegram.copyMessage(ctx.chat.id, imp.pzone, 7655)
+    } catch (err) {
+        console.log(err.message)
+    }
+})
+
+bot.action('betbuilder', async ctx => {
+    try {
+        await bot.telegram.copyMessage(ctx.chat.id, imp.pzone, 7655)
     } catch (err) {
         console.log(err.message)
     }
