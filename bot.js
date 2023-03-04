@@ -47,6 +47,7 @@ async function create(bot, ctx) {
             username: ctx.chat.first_name,
             refferer: "Regina"
         })
+        console.log('New user added to DB (Regina)')
     }
 }
 
@@ -61,6 +62,7 @@ bot.start(async ctx => {
         if (ctx.startPayload) {
             let pload = ctx.startPayload
             if (pload == 'ngono_bongo') {
+                console.log('Ngono Payload')
                 await bot.telegram.copyMessage(ctx.chat.id, imp.pzone, 7617, {
                     reply_markup: {
                         inline_keyboard: [[{ text: '✅ Kubali / Accept', callback_data: `accept_pload` }]]
