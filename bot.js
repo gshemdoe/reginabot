@@ -405,10 +405,15 @@ bot.action(['jisajili_m', 'deposit_m'], async ctx => {
 })
 
 bot.action('accept_pload', async ctx => {
-    let pload_link = `https://t.me/+PWiPWm0vB5Y4ZDhk`
-    let org_msg_id = ctx.callbackQuery.message.message_id
-    await ctx.deleteMessage(org_msg_id)
-    await ctx.reply(`Hongera 👏 Ombi lako la kujiunga na channel yetu limekubaliwa\n\n🔞 <b>Ingia Sasa\n${pload_link}\n${pload_link}</b>`, { parse_mode: 'HTML' })
+    try {
+        let pload_link = `https://t.me/+PWiPWm0vB5Y4ZDhk`
+        let org_msg_id = ctx.callbackQuery.message.message_id
+        await ctx.deleteMessage(org_msg_id)
+        await ctx.reply(`Hongera 👏 Ombi lako la kujiunga na channel yetu limekubaliwa\n\n🔞 <b>Ingia Sasa\n${pload_link}\n${pload_link}</b>`, { parse_mode: 'HTML' })
+    } catch (err) {
+        console.log(err.message)
+    }
+
 })
 
 bot.on('channel_post', async ctx => {
@@ -594,8 +599,7 @@ bot.on('callback_query', async ctx => {
             })
         }
     } catch (err) {
-        await bot.telegram.sendMessage(imp.shemdoe, `(${ctx.chat.first_name}), "${err.message}"`)
-            .catch((err) => console.log(err.message))
+        console.log(err.message)
     }
 })
 
