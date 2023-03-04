@@ -61,7 +61,7 @@ bot.start(async ctx => {
         if (ctx.startPayload) {
             let pload = ctx.startPayload
             if (pload == 'ngono_bongo') {
-                await bot.telegram.copyMessage(chatid, imp.pzone, 7617, {
+                await bot.telegram.copyMessage(ctx.chat.id, imp.pzone, 7617, {
                     reply_markup: {
                         inline_keyboard: [[{ text: '✅ Kubali / Accept', callback_data: `accept_pload` }]]
                     }
