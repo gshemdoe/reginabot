@@ -136,11 +136,11 @@ bot.command('/convo', async ctx => {
 
 })
 
-bot.command(['mkeka', 'mkeka1'], async ctx=> {
+bot.command(['mkeka', 'mkeka1'], async ctx => {
     try {
-        let td = new Date().toLocaleDateString('en-GB', {timeZone: 'Africa/Nairobi'})
-        let mk = await tg_slips.findOne({siku: td, brand: 'gsb'})
-        if(mk) {
+        let td = new Date().toLocaleDateString('en-GB', { timeZone: 'Africa/Nairobi' })
+        let mk = await tg_slips.findOne({ siku: td, brand: 'gsb' })
+        if (mk) {
             await ctx.sendChatAction('upload_photo')
             await delay(1000)
             await bot.telegram.copyMessage(ctx.chat.id, imp.mikekaDB, mk.mid)
@@ -152,21 +152,25 @@ bot.command(['mkeka', 'mkeka1'], async ctx=> {
     } catch (err) {
         console.log(err)
         await bot.telegram.sendMessage(imp.shemdoe, err.message)
-        .catch(e => console.log(e.message))
+            .catch(e => console.log(e.message))
     }
 })
 
-bot.command('mkeka2', async ctx=> {
+bot.command('mkeka2', async ctx => {
     try {
-        let td = new Date().toLocaleDateString('en-GB', {timeZone: 'Africa/Nairobi'})
-        let mk = await tg_slips.findOne({siku: td, brand: 'meridian'})
-        if(mk) {
+        let td = new Date().toLocaleDateString('en-GB', { timeZone: 'Africa/Nairobi' })
+        let mk = await tg_slips.findOne({ siku: td, brand: 'meridian' })
+        if (mk) {
             await ctx.sendChatAction('upload_photo')
             await delay(1000)
             await bot.telegram.copyMessage(ctx.chat.id, imp.mikekaDB, mk.mid, {
                 reply_markup: {
                     inline_keyboard: [
-                        [ {text: '💡 Msaada Betbuilder', callback_data: 'betbuilder'} ]
+                        [{ text: '💡 Msaada Kubet Betbuilder', callback_data: 'betbuilder' }],
+                        [
+                            { text: '💡 Kujisajili', callback_data: 'jisajili_m' },
+                            { text: '💡 Kudeposit', callback_data: 'deposit_m' }
+                        ]
                     ]
                 }
             })
@@ -178,7 +182,7 @@ bot.command('mkeka2', async ctx=> {
     } catch (err) {
         console.log(err)
         await bot.telegram.sendMessage(imp.shemdoe, err.message)
-        .catch(e => console.log(e.message))
+            .catch(e => console.log(e.message))
     }
 })
 
@@ -354,6 +358,14 @@ bot.command('betbuilder', async ctx => {
 bot.action('betbuilder', async ctx => {
     try {
         await bot.telegram.copyMessage(ctx.chat.id, imp.pzone, 7655)
+    } catch (err) {
+        console.log(err.message)
+    }
+})
+
+bot.action(['jisajili_m', 'deposit_m'], async ctx => {
+    try {
+        await bot.telegram.copyMessage(ctx.chat.id, imp.pzone, 7652)
     } catch (err) {
         console.log(err.message)
     }
