@@ -39,7 +39,7 @@ const imp = {
 
 const gsb_ug = `https://track.africabetpartners.com/visit/?bta=35468&nci=5559`
 
-async function create(bot, ctx, type) {
+async function create(bot, ctx) {
     let starter = await nyumbuModel.findOne({ chatid: ctx.chat.id })
     if (!starter) {
         await nyumbuModel.create({
@@ -47,19 +47,39 @@ async function create(bot, ctx, type) {
             username: ctx.chat.first_name,
             refferer: "Regina"
         })
-        await bot.telegram.sendMessage(imp.shemdoe, `${ctx.chat.first_name} added to database with ${type}`)
     }
 }
 
 //delaying
 const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms))
 
-
-bot.command(['start', 'help', '/stop'], async ctx => {
+bot.start(async ctx => {
     try {
-        let typ = 'start command'
+        //add to database
+        await create(bot, ctx)
+
+        if (ctx.startPayload) {
+            let pload = ctx.startPayload
+            if (pload == 'ngono_bongo') {
+                await bot.telegram.copyMessage(chatid, imp.pzone, 7617, {
+                    reply_markup: {
+                        inline_keyboard: [[{ text: '✅ Kubali / Accept', callback_data: `accept_pload` }]]
+                    }
+                })
+            }
+        } else {
+            await bot.telegram.copyMessage(ctx.chat.id, imp.pzone, 7653)
+        }
+
+    } catch (err) {
+        console.log(err.message)
+    }
+})
+
+bot.command(['help', '/stop'], async ctx => {
+    try {
         await bot.telegram.copyMessage(ctx.chat.id, imp.pzone, 7653)
-        create(bot, ctx, typ)
+        await create(bot, ctx)
     } catch (err) {
         console.log(err.message)
     }
@@ -290,12 +310,13 @@ bot.command('copy', async ctx => {
 bot.command('/post_to_channels', async ctx => {
     let txt = ctx.message.text
     let ch_link = 'https://t.me/+804l_wD7yYgzM2Q0'
+    let pload_link = `https://t.me/regina_tzbot?start=ngono_bongo`
     let keyb = [
-        [{ text: "❌❌ VIDEO ZA KUTOMBANA HAPA ❤️", url: ch_link },],
-        [{ text: "🔥 Unganishwa Na Malaya Mikoa Yote 🔞", url: ch_link },],
-        [{ text: "🍑🍑 Magroup Ya Ngono na Madada Poa 🔞", url: ch_link },],
-        [{ text: "💋 XXX ZA BONGO ❌❌❌", url: ch_link },],
-        [{ text: "🔥🔥 Connection Za Chuo na Mastaa 🔞", url: ch_link }]
+        [{ text: "❌❌ VIDEO ZA KUTOMBANA HAPA ❤️", url: pload_link },],
+        [{ text: "🔥 Unganishwa Na Malaya Mikoa Yote 🔞", url: pload_link },],
+        [{ text: "🍑🍑 Magroup Ya Ngono na Madada Poa 🔞", url: pload_link },],
+        [{ text: "💋 XXX ZA BONGO ❌❌❌", url: pload_link },],
+        [{ text: "🔥🔥 Connection Za Chuo na Mastaa 🔞", url: pload_link }]
     ]
 
     let mid = Number(txt.split('post_to_channels=')[1])
@@ -369,6 +390,13 @@ bot.action(['jisajili_m', 'deposit_m'], async ctx => {
     } catch (err) {
         console.log(err.message)
     }
+})
+
+bot.action('accept_pload', async ctx=> {
+    let pload_link = `https://t.me/+PWiPWm0vB5Y4ZDhk`
+    let org_msg_id = ctx.callbackQuery.message.message_id
+    await ctx.deleteMessage(org_msg_id)
+    await ctx.reply(`Hongera 👏 Ombi lako la kujiunga na channel yetu limekubaliwa\n\n🔞 <b>Ingia Sasa\n${pload_link}\n${pload_link}</b>`, {parse_mode: 'HTML'})
 })
 
 bot.on('channel_post', async ctx => {
@@ -602,8 +630,7 @@ bot.on('text', async ctx => {
 
         else {
             //create user if not on database
-            let typ = 'sending message'
-            await create(bot, ctx, typ)
+            await create(bot, ctx)
 
             let userid = ctx.chat.id
             let txt = ctx.message.text
