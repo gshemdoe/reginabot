@@ -539,6 +539,7 @@ bot.on('chat_join_request', async ctx => {
         let pload_link = `https://t.me/+PWiPWm0vB5Y4ZDhk`
 
         await ctx.approveChatJoinRequest(userid)
+        await delay(1000)
         await bot.telegram.sendMessage(userid, `Hongera 👏 Ombi lako la kujiunga na channel yetu limekubaliwa\n\n🔞 <b>Ingia Sasa\n${pload_link}\n${pload_link}</b>`, { parse_mode: 'HTML' })
     } catch (err) {
         console.log(err.message)
