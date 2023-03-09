@@ -59,11 +59,12 @@ bot.start(async ctx => {
     try {
         if (ctx.startPayload) {
             let pload = ctx.startPayload
+            let url = `https://t.me/+PWiPWm0vB5Y4ZDhk`
             if (pload == 'ngono_bongo') {
                 console.log('Ngono Payload Started')
                 await bot.telegram.copyMessage(ctx.chat.id, imp.pzone, 7617, {
                     reply_markup: {
-                        inline_keyboard: [[{ text: '✅ Kubali / Accept', callback_data: `accept_pload` }]]
+                        inline_keyboard: [[{ text: '✅ Kubali / Accept', url }]]
                     }
                 })
             }
@@ -443,6 +444,16 @@ bot.on('channel_post', async ctx => {
                     }, 1000)
                 }
             }
+            else if(txt.toLowerCase().includes('wrap gsb')) {
+                await bot.telegram.copyMessage(ctx.chat.id, imp.mikekaDB, 54)
+                await delay(500)
+                await ctx.deleteMessage(txtid)
+            }
+            else if(txt.toLowerCase().includes('wrap meridian')) {
+                await bot.telegram.copyMessage(ctx.chat.id, imp.mikekaDB, 55)
+                await delay(500)
+                await ctx.deleteMessage(txtid)
+            }
         }
 
         // for regina only
@@ -523,42 +534,16 @@ bot.command('approving', async ctx => {
 
 bot.on('chat_join_request', async ctx => {
     try {
+        let userid = ctx.chatJoinRequest.user_chat_id
+        let chan_id = ctx.chatJoinRequest.chat.id
+        let pload_link = `https://t.me/+PWiPWm0vB5Y4ZDhk`
 
-        let username = ctx.chatJoinRequest.from.first_name
-        let ccid = ctx.chatJoinRequest.from.id // old
-        let chatid = ctx.chatJoinRequest.user_chat_id //new update
-        let cha_id = ctx.chatJoinRequest.chat.id
-
-        let nyumbu = await nyumbuModel.findOne({ chatid })
-        if (!nyumbu) {
-            await nyumbuModel.create({ chatid, username, blocked: false, refferer: "Regina" })
-        }
-
-        await tempChat.create({ chatid, cha_id })
-
-        await bot.telegram.copyMessage(chatid, imp.pzone, 7617, {
-            reply_markup: {
-                inline_keyboard: [[{ text: '✅ Kubali / Accept', callback_data: `ingia__${chatid}__${cha_id}` }]]
-            }
-        }).catch(async (error) => {
-            if (error.message.includes(`can't initiate conversation`)) {
-                await ctx.approveChatJoinRequest(chatid).catch(e => console.log(e.message))
-                await tempChat.findOneAndDelete({ chatid })
-                await bot.telegram.sendMessage(imp.shemdoe, `I failed to start convo with ${username} so I approve him regardless`)
-                    .catch(ee => console.log(ee.message))
-            }
-        })
+        await ctx.approveChatJoinRequest(userid)
+        await ctx.reply(`Hongera 👏 Ombi lako la kujiunga na channel yetu limekubaliwa\n\n🔞 <b>Ingia Sasa\n${pload_link}\n${pload_link}</b>`, { parse_mode: 'HTML' })
     } catch (err) {
-        console.log(err)
-        if (!err.message) {
-            if (!err.description.includes('bot was blocked') && !err.description.includes('USER_ALREADY')) {
-                await bot.telegram.sendMessage(imp.shemdoe, `(${ctx.chatJoinRequest.from.first_name}), "${err.description}"`)
-            }
-        } else {
-            if (!err.message.includes('bot was blocked') && !err.message.includes('USER_ALREADY')) {
-                await bot.telegram.sendMessage(imp.shemdoe, `(${ctx.chatJoinRequest.from.first_name}), "${err.message}"`)
-            }
-        }
+        console.log(err.message)
+        await bot.telegram.sendMessage(imp.shemdoe, `(${ctx.chat.id}) ` +err.message)
+        .catch(e => console.log(e.message))
     }
 })
 
