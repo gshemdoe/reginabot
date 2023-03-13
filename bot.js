@@ -741,6 +741,5 @@ process.on('uncaughtException', (err) => {
     bot.telegram.sendMessage(741815228, err.message + ' - It is uncaught exception.')
         .catch((err) => {
             console.log(err.message + ' while sending you')
-            process.exit()
         })
 })
