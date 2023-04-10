@@ -9,6 +9,9 @@ const vidb = require('./database/db')
 const mkekaMega = require('./database/mkeka-mega')
 const mongoose = require('mongoose')
 
+const call_supatips_function = require('./fns/supatips')
+const call_oncallbackquery_function = require('./fns/oncallbackquery')
+
 const bot = new Telegraf(process.env.BOT_TOKEN)
     .catch((err) => console.log(err.message))
 
@@ -88,6 +91,15 @@ bot.start(async ctx => {
 
     } catch (err) {
         console.log(err.message)
+    }
+})
+
+bot.command('admin', async ctx=> {
+    try {
+        let txt = `<u>Admin Commands</u>\n\n/stats - stats\n/supatoday - fetch supatips (today)\n/supayesterday - fetch supatips (yesterday)`
+        if(ctx.chat.id == imp.shemdoe){ctx.reply(txt, {parse_mode: 'HTML'})}
+    } catch (err) {
+        await ctx.reply(err.message)
     }
 })
 
@@ -550,46 +562,8 @@ bot.on('chat_join_request', async ctx => {
     }
 })
 
-bot.on('callback_query', async ctx => {
-    try {
-        let data = ctx.callbackQuery.data
-        let mid = ctx.callbackQuery.message.message_id
-        if (data.length > 60) {
-            await bot.telegram.sendMessage(imp.shemdoe, 'Warning: Callback data at approve is above the limit')
-                .catch((err) => console.log(err.message))
-        }
-
-        if (data.includes('ingia__')) {
-            let info = data.split('__')
-            let userid = info[1]
-            let channel_id = info[2]
-            let ch_link = 'https://t.me/+804l_wD7yYgzM2Q0'
-
-            await bot.telegram.approveChatJoinRequest(channel_id, userid)
-                .catch(async (error) => {
-                    if (error.message.includes('ALREADY_PARTICIPANT')) {
-                        await ctx.deleteMessage(mid).catch(e => console.log(e.message))
-                        await ctx.reply(`Ombi lako limekubaliwa, ingia sasa \n${ch_link}`)
-                            .catch(ee => console.log(ee.message))
-                    }
-                })
-
-            await tempChat.findOneAndDelete({ chatid: Number(userid) })
-            console.log('pending deleted')
-            await ctx.deleteMessage(mid)
-            await ctx.reply(`<b>Hi! ${ctx.chat.first_name}</b>\n\nOmbi lako limekubaliwa... Ingia kwenye channel yetu kwa kubonyeza button hapo chini`, {
-                parse_mode: 'HTML',
-                reply_markup: {
-                    inline_keyboard: [
-                        [{ text: '✅ Ingia Sasa', url: ch_link }]
-                    ]
-                }
-            })
-        }
-    } catch (err) {
-        console.log(err.message)
-    }
-})
+call_supatips_function(bot)
+call_oncallbackquery_function(bot)
 
 bot.on('text', async ctx => {
     try {
