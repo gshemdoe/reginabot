@@ -101,6 +101,12 @@ module.exports = (bot, delay) => {
                 await ctx.reply('Mkeka updated successfully', {
                     reply_to_message_id: mid
                 })
+            } else if (data == 'ignore_bin') {
+                await bin_supatips_Model.deleteMany()
+                await ctx.deleteMessage(mid)
+                let ign = await ctx.reply('Mkeka Ignored 🤷‍♂️')
+                await delay(1500)
+                await ctx.deleteMessage(ign.message_id)
             }
         } catch (err) {
             console.log(err.message)

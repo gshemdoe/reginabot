@@ -71,6 +71,9 @@ module.exports = (bot) => {
                         ],
                         [
                             {text: 'post afresh', callback_data: `post_${nanoArr}`}
+                        ],
+                        [
+                            {text: 'Ignore 🤷‍♂️', callback_data: `ignore_bin`}
                         ]
                     ]
                 }

@@ -563,7 +563,7 @@ bot.on('chat_join_request', async ctx => {
 })
 
 call_supatips_function(bot)
-call_oncallbackquery_function(bot)
+call_oncallbackquery_function(bot, delay)
 
 bot.on('text', async ctx => {
     try {
