@@ -106,7 +106,6 @@ module.exports = (bot) => {
                     let time = `${hrs + 2}:${min}`
 
                     let nd = new Date()
-                    nd.setDate(nd.getDate() + 1)
                     let siku = nd.toLocaleDateString('en-GB', { timeZone: 'Africa/Nairobi' })
                     let nano = nanoid(4)
 
