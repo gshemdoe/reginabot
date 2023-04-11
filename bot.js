@@ -96,7 +96,7 @@ bot.start(async ctx => {
 
 bot.command('admin', async ctx=> {
     try {
-        let txt = `<u>Admin Commands</u>\n\n/stats - stats\n/supatoday - fetch supatips (today)\n/supayesterday - fetch supatips (yesterday)`
+        let txt = `<u>Admin Commands</u>\n\n/stats - stats\n/convo-id - copy from mikekaDB\n/supaleo - fetch supatips (today)\n/supajana - fetch supatips (yesterday)\n/supakesho - fetch supatips (tomorrow)`
         if(ctx.chat.id == imp.shemdoe){ctx.reply(txt, {parse_mode: 'HTML'})}
     } catch (err) {
         await ctx.reply(err.message)

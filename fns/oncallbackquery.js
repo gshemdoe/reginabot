@@ -9,6 +9,10 @@ module.exports = (bot, delay) => {
             d.setDate(d.getDate() - 1)
             let ydd =  d.toLocaleDateString('en-GB', {timeZone: 'Africa/Nairobi'})
 
+            let trh = new Date()
+            trh.setDate(trh.getDate() + 1)
+            let ksh =  trh.toLocaleDateString('en-GB', {timeZone: 'Africa/Nairobi'})
+
             let data = ctx.callbackQuery.data
             let mid = ctx.callbackQuery.message.message_id
             if (data.length > 60) {
@@ -84,6 +88,26 @@ module.exports = (bot, delay) => {
             } else if (data.includes('update2d_')) {
                 let nano_Arr = data.split('update2d_')[1].split('+')
                 await supatips_Model.deleteMany({siku: tdd})
+                for (let nano of nano_Arr) {
+                    let bin = await bin_supatips_Model.findOne({nano})
+                    await supatips_Model.create({
+                        matokeo: bin.matokeo,
+                        time: bin.time,
+                        siku: bin.siku,
+                        tip: bin.tip,
+                        league: bin.league,
+                        nano: bin.nano,
+                        status: bin.status,
+                        match: bin.match
+                    })
+                    await bin_supatips_Model.findOneAndDelete({nano})
+                }
+                await ctx.reply('Mkeka updated successfully', {
+                    reply_to_message_id: mid
+                })
+            } else if (data.includes('updatekesho_')) {
+                let nano_Arr = data.split('updatekesho_')[1].split('+')
+                await supatips_Model.deleteMany({siku: trh})
                 for (let nano of nano_Arr) {
                     let bin = await bin_supatips_Model.findOne({nano})
                     await supatips_Model.create({

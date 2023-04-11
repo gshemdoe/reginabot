@@ -7,7 +7,7 @@ const supatips_Model = require('../database/supatips')
 const bin_supatips_Model = require('../database/supatips-bin')
 
 module.exports = (bot) => {
-    bot.command('clear_supabin', async ctx=> {
+    bot.command('clear_supabin', async ctx => {
         try {
             await bin_supatips_Model.deleteMany()
             await ctx.reply('supabin cleared successfully')
@@ -16,7 +16,8 @@ module.exports = (bot) => {
         }
     })
 
-    bot.command('supatoday', async ctx => {
+    //supatoday
+    bot.command('supaleo', async ctx => {
         try {
             let sup_url = `https://www.supatips.com/`
 
@@ -27,14 +28,14 @@ module.exports = (bot) => {
             let nanoArr = ''
 
             let tday_table = $('#exTab2 .tab-content div#2 .widget-table-fixtures table tbody')
-            tday_table.each(async(i, el) => {
+            tday_table.each(async (i, el) => {
                 let time_data = $('td:nth-child(1)', el).text()
                 let time_arr = time_data.split(':')
                 let hrs = Number(time_arr[0])
                 let min = time_arr[1]
                 let time = `${hrs + 2}:${min}`
-                
-                let siku = new Date().toLocaleDateString('en-GB', {timeZone: 'Africa/Nairobi'})
+
+                let siku = new Date().toLocaleDateString('en-GB', { timeZone: 'Africa/Nairobi' })
                 let nano = nanoid(4)
 
                 let league = $('td:nth-child(2)', el).text()
@@ -43,16 +44,16 @@ module.exports = (bot) => {
 
                 let tip = $('td:nth-child(4)', el).text()
                 let matokeo = $('td:nth-child(5)', el).text()
-                if(matokeo.length<2) {
+                if (matokeo.length < 2) {
                     matokeo = '-:-'
                 }
 
                 //create text
                 text = text + `⌚ ${time}, ${league}\n<b>⚽ ${match}</b>\n🎯 Tip: <b>${tip} (${matokeo})</b>\n\n`
-                if(i == tday_table.length - 1) {
-                    nanoArr = nanoArr+ `${nano}`
+                if (i == tday_table.length - 1) {
+                    nanoArr = nanoArr + `${nano}`
                 } else {
-                    nanoArr = nanoArr+ `${nano}+`
+                    nanoArr = nanoArr + `${nano}+`
                 }
 
                 await bin_supatips_Model.create({
@@ -64,21 +65,94 @@ module.exports = (bot) => {
                 reply_markup: {
                     inline_keyboard: [
                         [
-                            {text: 'update as today', callback_data: `update2d_${nanoArr}`}
+                            { text: 'update as today', callback_data: `update2d_${nanoArr}` }
                         ],
                         [
-                            {text: 'update as yesterday', callback_data: `updateyd_${nanoArr}`}
+                            { text: 'update as yesterday', callback_data: `updateyd_${nanoArr}` }
                         ],
                         [
-                            {text: 'post afresh', callback_data: `post_${nanoArr}`}
+                            { text: 'post afresh', callback_data: `post_${nanoArr}` }
                         ],
                         [
-                            {text: 'Ignore 🤷‍♂️', callback_data: `ignore_bin`}
+                            { text: 'Ignore 🤷‍♂️', callback_data: `ignore_bin` }
                         ]
                     ]
                 }
             })
 
+        } catch (err) {
+            await ctx.reply(err.message)
+        }
+    })
+
+    //supatomorrow
+    bot.command('supakesho', async ctx => {
+        try {
+            let sup_url = `https://www.supatips.com/`
+
+            let html = await axios.get(sup_url)
+            let $ = cheerio.load(html.data)
+
+            let text = ''
+            let nanoArr = ''
+
+            let tday_table = $('#exTab2 .tab-content div#3 .widget-table-fixtures table tbody')
+            if (tday_table.length > 1) {
+                tday_table.each(async (i, el) => {
+                    let time_data = $('td:nth-child(1)', el).text()
+                    let time_arr = time_data.split(':')
+                    let hrs = Number(time_arr[0])
+                    let min = time_arr[1]
+                    let time = `${hrs + 2}:${min}`
+
+                    let nd = new Date()
+                    nd.setDate(nd.getDate() + 1)
+                    let siku = new nd.toLocaleDateString('en-GB', { timeZone: 'Africa/Nairobi' })
+                    let nano = nanoid(4)
+
+                    let league = $('td:nth-child(2)', el).text()
+                    let match = $('td:nth-child(3)', el).text()
+                    match = match.replace(/ vs /g, ' - ')
+
+                    let tip = $('td:nth-child(4)', el).text()
+                    let matokeo = $('td:nth-child(5)', el).text()
+                    if (matokeo.length < 2) {
+                        matokeo = '-:-'
+                    }
+
+                    //create text
+                    text = text + `⌚ ${time}, ${league}\n<b>⚽ ${match}</b>\n🎯 Tip: <b>${tip} (${matokeo})</b>\n\n`
+                    if (i == tday_table.length - 1) {
+                        nanoArr = nanoArr + `${nano}`
+                    } else {
+                        nanoArr = nanoArr + `${nano}+`
+                    }
+
+                    await bin_supatips_Model.create({
+                        time, league, match, tip, siku, nano, matokeo
+                    })
+                })
+
+                await ctx.reply(text + `Arrs: ${nanoArr}`, {
+                    parse_mode: "HTML",
+                    reply_markup: {
+                        inline_keyboard: [
+                            [
+                                { text: 'update as today', callback_data: `update2d_${nanoArr}` }
+                            ],
+                            [
+                                { text: 'update as tomorrow', callback_data: `updatekesho_${nanoArr}` }
+                            ],
+                            [
+                                { text: 'post afresh', callback_data: `post_${nanoArr}` }
+                            ],
+                            [
+                                { text: 'Ignore 🤷‍♂️', callback_data: `ignore_bin` }
+                            ]
+                        ]
+                    }
+                })
+            } else {ctx.reply('Mpumbavu za kesho bado hajaandaa 😏')}
         } catch (err) {
             await ctx.reply(err.message)
         }
