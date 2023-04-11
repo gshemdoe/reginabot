@@ -65,13 +65,10 @@ module.exports = (bot) => {
                 reply_markup: {
                     inline_keyboard: [
                         [
-                            { text: 'update as today', callback_data: `update2d_${nanoArr}` }
+                            { text: 'upd. as today (trh ya leo +3)', callback_data: `update2d_${nanoArr}` }
                         ],
                         [
-                            { text: 'update as yesterday', callback_data: `updateyd_${nanoArr}` }
-                        ],
-                        [
-                            { text: 'post afresh', callback_data: `post_${nanoArr}` }
+                            { text: 'upd. as yesterday (trh ya jana +3)', callback_data: `updateyd_${nanoArr}` }
                         ],
                         [
                             { text: 'Ignore 🤷‍♂️', callback_data: `ignore_bin` }
@@ -97,6 +94,8 @@ module.exports = (bot) => {
             let nanoArr = ''
 
             let tday_table = $('#exTab2 .tab-content div#3 .widget-table-fixtures table tbody')
+            let nd = new Date()
+            let siku = nd.toLocaleDateString('en-GB', { timeZone: 'Africa/Nairobi' })
             if (tday_table.length > 1) {
                 tday_table.each(async (i, el) => {
                     let time_data = $('td:nth-child(1)', el).text()
@@ -104,9 +103,6 @@ module.exports = (bot) => {
                     let hrs = Number(time_arr[0])
                     let min = time_arr[1]
                     let time = `${hrs + 2}:${min}`
-
-                    let nd = new Date()
-                    let siku = nd.toLocaleDateString('en-GB', { timeZone: 'Africa/Nairobi' })
                     let nano = nanoid(4)
 
                     let league = $('td:nth-child(2)', el).text()
@@ -137,13 +133,10 @@ module.exports = (bot) => {
                     reply_markup: {
                         inline_keyboard: [
                             [
-                                { text: 'update as today', callback_data: `update2d_${nanoArr}` }
+                                { text: 'update as today (trh ya leo +3)', callback_data: `update2d_${nanoArr}` }
                             ],
                             [
-                                { text: 'update as tomorrow', callback_data: `updatekesho_${nanoArr}` }
-                            ],
-                            [
-                                { text: 'post afresh', callback_data: `post_${nanoArr}` }
+                                { text: 'update as tomorrow (trh ya kesho +3)', callback_data: `updatekesho_${nanoArr}` }
                             ],
                             [
                                 { text: 'Ignore 🤷‍♂️', callback_data: `ignore_bin` }
@@ -151,7 +144,7 @@ module.exports = (bot) => {
                         ]
                     }
                 })
-            } else {ctx.reply('Mpumbavu za kesho bado hajaandaa 😏')}
+            } else { ctx.reply('Mpumbavu za kesho bado hajaandaa 😏') }
         } catch (err) {
             await ctx.reply(err.message)
         }
