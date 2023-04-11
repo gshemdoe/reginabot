@@ -34,7 +34,7 @@ module.exports = (bot) => {
                 let hrs = Number(time_arr[0])
                 let actual_time = hrs + 2
                 if(actual_time > 24) {
-                    actual_time = '0' + actual_time - 25
+                    actual_time = '0' + (actual_time - 25)
                 }
                 let min = time_arr[1]
                 let time = `${actual_time}:${min}`
