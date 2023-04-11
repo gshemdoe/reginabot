@@ -107,7 +107,7 @@ module.exports = (bot) => {
 
                     let nd = new Date()
                     nd.setDate(nd.getDate() + 1)
-                    let siku = new nd.toLocaleDateString('en-GB', { timeZone: 'Africa/Nairobi' })
+                    let siku = nd.toLocaleDateString('en-GB', { timeZone: 'Africa/Nairobi' })
                     let nano = nanoid(4)
 
                     let league = $('td:nth-child(2)', el).text()
