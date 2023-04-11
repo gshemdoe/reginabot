@@ -113,6 +113,23 @@ bot.command(['help', '/stop'], async ctx => {
 
 })
 
+bot.command('supatips', async ctx=> {
+    try {
+        let url = `http://mkekawaleo.com/#supa-za-leo`
+        await bot.telegram.copyMessage(ctx.chat.id, imp.mikekaDB, 255, {
+            reply_markup: {
+                inline_keyboard: [
+                    [
+                        { text: '⭐⭐⭐ Fungua SupaTips ⭐⭐⭐', url}
+                    ]
+                ]
+            }
+        })
+    } catch (error) {
+        console.log(err.message)
+    }
+})
+
 bot.command('/broadcast', async ctx => {
     let myId = ctx.chat.id
     let txt = ctx.message.text
