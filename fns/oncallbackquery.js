@@ -113,7 +113,7 @@ module.exports = (bot, delay) => {
                     await supatips_Model.create({
                         matokeo: bin.matokeo,
                         time: bin.time,
-                        siku: bin.siku,
+                        siku: ksh,
                         tip: bin.tip,
                         league: bin.league,
                         nano: bin.nano,
