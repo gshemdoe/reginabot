@@ -100,7 +100,7 @@ module.exports = (bot) => {
             let tday_table = $('#exTab2 .tab-content div#3 .widget-table-fixtures table tbody')
             let nd = new Date()
             let siku = nd.toLocaleDateString('en-GB', { timeZone: 'Africa/Nairobi' })
-            if (tday_table.length > 1) {
+            if (tday_table.length >= 1) {
                 tday_table.each(async (i, el) => {
                     let time_data = $('td:nth-child(1)', el).text()
                     let time_arr = time_data.split(':')
