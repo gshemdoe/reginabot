@@ -529,7 +529,7 @@ bot.on('chat_join_request', async ctx => {
 
         await ctx.approveChatJoinRequest(userid)
         await delay(1000)
-        await bot.telegram.sendMessage(userid, `Hongera 👏 Ombi lako la kujiunga na channel yetu limekubaliwa\n\n🔞 <b>Ingia Sasa\n${pload_link}\n${pload_link}</b>`, { parse_mode: 'HTML' })
+        await bot.telegram.sendMessage(userid, `Hongera 👏 Ombi lako la kujiunga na channel yetu limekubaliwa\n\n🔞 <b>Ingia Sasa\n${pload_link}\n${pload_link}</b>`, { parse_mode: 'HTML', reply_markup: defaultReplyMkp })
     } catch (err) {
         console.log(err.message)
         await bot.telegram.sendMessage(imp.shemdoe, `(${ctx.chat.id}) ` + err.message)
