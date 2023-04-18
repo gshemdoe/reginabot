@@ -86,10 +86,7 @@ bot.start(async ctx => {
                 console.log('Ngono Payload Started')
                 await bot.telegram.copyMessage(ctx.chat.id, imp.pzone, 7617, {
                     reply_markup: {
-                        inline_keyboard: [[{ text: '✅ Kubali / Accept', url }]],
-                        keyboard: defaultReplyMkp.keyboard,
-                        resize_keyboard: true,
-                        is_persistent: true
+                        inline_keyboard: [[{ text: '✅ Kubali / Accept', url }]]
                     }
                 })
             }
