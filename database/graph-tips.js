@@ -7,6 +7,10 @@ const graphSchema = new Schema({
     },
     siku: {
         type: String
+    },
+    loaded: {
+        type: Number,
+        default: 1
     }
 }, {strict: false })
 
