@@ -117,7 +117,7 @@ bot.start(async ctx => {
 
 bot.command('admin', async ctx => {
     try {
-        let txt = `<u>Admin Commands</u>\n\n/stats - stats\n/convo-id - copy from mikekaDB\n/supaleo - fetch supatips (today)\n/supajana - fetch supatips (yesterday)\n/supakesho - fetch supatips (tomorrow)`
+        let txt = `<u>Admin Commands</u>\n\n/stats - stats\n/convo-id - copy from mikekaDB\n/supaleo - fetch supatips (today)\n/supajana - fetch supatips (yesterday)\n/supakesho - fetch supatips (tomorrow)\n/graph - graph stats`
         if (ctx.chat.id == imp.shemdoe) { ctx.reply(txt, { parse_mode: 'HTML' }) }
     } catch (err) {
         await ctx.reply(err.message)
@@ -132,6 +132,20 @@ bot.command(['help', '/stop'], async ctx => {
         console.log(err.message)
     }
 
+})
+
+bot.command('graph', async ctx=> {
+    try {
+        let graphs = await graphDB.find()
+        let txt = ``
+
+        for(let graph of graphs) {
+            txt = txt + `📅 ${graph.siku}\nStats: ${graph.loaded.toLocaleString("en-US")}\n\n`
+        }
+        await ctx.reply(txt)
+    } catch (err) {
+        console.log(err.message)
+    }
 })
 
 bot.command('supatips', async ctx => {
