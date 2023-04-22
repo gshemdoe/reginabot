@@ -137,10 +137,10 @@ bot.command(['help', '/stop'], async ctx => {
 bot.command('graph', async ctx=> {
     try {
         let graphs = await graphDB.find()
-        let txt = ``
+        let txt = `https://font5.net/mkekawaleo/tanzania\n\n`
 
         for(let graph of graphs) {
-            txt = txt + `📅 ${graph.siku}\nStats: ${graph.loaded.toLocaleString("en-US")}\n\n`
+            txt = txt + `📅 ${graph.siku}\nStats: ${graph.loaded.toLocaleString("en-US")}\nLink: ${graph.link}\n\n`
         }
         await ctx.reply(txt)
     } catch (err) {
