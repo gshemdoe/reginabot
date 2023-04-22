@@ -11,6 +11,10 @@ const graphSchema = new Schema({
     loaded: {
         type: Number,
         default: 1
+    },
+    tiktok: {
+        type: Number,
+        default: 1
     }
 }, {strict: false })
 
