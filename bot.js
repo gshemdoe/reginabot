@@ -142,7 +142,7 @@ bot.command('graph', async ctx=> {
         for(let graph of graphs) {
             txt = txt + `📅 ${graph.siku}\nStats: ${graph.loaded.toLocaleString("en-US")}\nLink: ${graph.link}\n\n`
         }
-        await ctx.reply(txt)
+        await ctx.reply(txt, {disable_web_page_preview: true})
     } catch (err) {
         console.log(err.message)
     }
