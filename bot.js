@@ -7,6 +7,7 @@ const mkekadb = require('./database/mkeka')
 const tg_slips = require('./database/tg_slips')
 const vidb = require('./database/db')
 const mkekaMega = require('./database/mkeka-mega')
+const graphDB = require('./database/graph-tips')
 const mongoose = require('mongoose')
 
 const call_supatips_function = require('./fns/supatips')
@@ -450,11 +451,21 @@ bot.on('channel_post', async ctx => {
             let rp_id = ctx.channelPost.reply_to_message.message_id
             let rp_msg = ctx.channelPost.reply_to_message.text
 
-            if (txt.includes(' - ')) {
+            if (txt.includes(' - ') && !txt.toLowerCase().includes('graph')) {
                 let data = txt.split(' - ')
                 await tg_slips.create({ brand: data[0].toLowerCase(), siku: data[1] + '/2023', mid: rp_id })
                 let info = await ctx.reply('Mkeka posted', { reply_to_message_id: rp_id })
                 await delay(1000)
+                await ctx.deleteMessage(info.message_id)
+            } else if(txt.toLowerCase().includes('graph')) {
+                let link = ctx.channelPost.reply_to_message.text
+                let siku = txt.split('ph - ')[1]
+                await graphDB.create({
+                    link,
+                    siku: siku + '/2023'
+                })
+                let info = await ctx.reply('Graph posted', { reply_to_message_id: rp_id })
+                await delay(2000)
                 await ctx.deleteMessage(info.message_id)
             }
         }
