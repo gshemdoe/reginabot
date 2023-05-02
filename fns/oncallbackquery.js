@@ -107,7 +107,7 @@ module.exports = (bot, delay) => {
                 })
             } else if (data.includes('updatekesho_')) {
                 let nano_Arr = data.split('updatekesho_')[1].split('+')
-                await supatips_Model.deleteMany({siku: trh})
+                await supatips_Model.deleteMany({siku: ksh})
                 for (let nano of nano_Arr) {
                     let bin = await bin_supatips_Model.findOne({nano})
                     await supatips_Model.create({
