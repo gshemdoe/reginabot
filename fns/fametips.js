@@ -9,7 +9,7 @@ module.exports = (bot) => {
     bot.command('clear_fametips', async ctx => {
         try {
             await bin_supatips_Model.deleteMany()
-            await ctx.reply('supabin cleared successfully')
+            await ctx.reply('famebin cleared successfully')
         } catch (err) {
             console.log(err.message)
         }
