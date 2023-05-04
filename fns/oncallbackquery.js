@@ -1,4 +1,5 @@
 const supatips_Model = require('../database/supatips')
+const fametips_Model = require('../database/fametips')
 const bin_supatips_Model = require('../database/supatips-bin')
 
 module.exports = (bot, delay) => {
@@ -125,7 +126,72 @@ module.exports = (bot, delay) => {
                 await ctx.reply('Mkeka updated successfully', {
                     reply_to_message_id: mid
                 })
-            } else if (data == 'ignore_bin') {
+            }
+            
+            //fametipis---------------
+            else if (data.includes('updfameyestd_')) {
+                let nano_Arr = data.split('updfameyestd_')[1].split('+')
+                await supatips_Model.deleteMany({siku: ydd})
+                for (let nano of nano_Arr) {
+                    let bin = await bin_supatips_Model.findOne({nano})
+                    await fametips_Model.create({
+                        matokeo: bin.matokeo,
+                        time: bin.time,
+                        siku: ydd,
+                        tip: bin.tip,
+                        league: bin.league,
+                        nano: bin.nano,
+                        status: bin.status,
+                        match: bin.match
+                    })
+                    await bin_supatips_Model.findOneAndDelete({nano})
+                }
+                await ctx.reply('Mkeka updated successfully', {
+                    reply_to_message_id: mid
+                })
+            } else if (data.includes('updfametoday_')) {
+                let nano_Arr = data.split('updfametoday_')[1].split('+')
+                await fametips_Model.deleteMany({siku: tdd})
+                for (let nano of nano_Arr) {
+                    let bin = await bin_supatips_Model.findOne({nano})
+                    await fametips_Model.create({
+                        matokeo: bin.matokeo,
+                        time: bin.time,
+                        siku: bin.siku,
+                        tip: bin.tip,
+                        league: bin.league,
+                        nano: bin.nano,
+                        status: bin.status,
+                        match: bin.match
+                    })
+                    await bin_supatips_Model.findOneAndDelete({nano})
+                }
+                await ctx.reply('Mkeka updated successfully', {
+                    reply_to_message_id: mid
+                })
+            } else if (data.includes('updfamekesho_')) {
+                let nano_Arr = data.split('updfamekesho_')[1].split('+')
+                await supatips_Model.deleteMany({siku: ksh})
+                for (let nano of nano_Arr) {
+                    let bin = await bin_supatips_Model.findOne({nano})
+                    await fametips_Model.create({
+                        matokeo: bin.matokeo,
+                        time: bin.time,
+                        siku: ksh,
+                        tip: bin.tip,
+                        league: bin.league,
+                        nano: bin.nano,
+                        status: bin.status,
+                        match: bin.match
+                    })
+                    await bin_supatips_Model.findOneAndDelete({nano})
+                }
+                await ctx.reply('Mkeka updated successfully', {
+                    reply_to_message_id: mid
+                })
+            }
+            
+            else if (data == 'ignore_bin') {
                 await bin_supatips_Model.deleteMany()
                 await ctx.deleteMessage(mid)
                 let ign = await ctx.reply('Mkeka Ignored 🤷‍♂️')

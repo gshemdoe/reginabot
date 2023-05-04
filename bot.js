@@ -11,6 +11,7 @@ const graphDB = require('./database/graph-tips')
 const mongoose = require('mongoose')
 
 const call_supatips_function = require('./fns/supatips')
+const call_fametips_function = require('./fns/fametips')
 const call_betslip_function = require('./fns/betslip')
 const call_oncallbackquery_function = require('./fns/oncallbackquery')
 const call_sendMikeka_functions = require('./fns/mkeka-1-2-3')
@@ -563,6 +564,7 @@ bot.on('chat_join_request', async ctx => {
 })
 
 call_supatips_function(bot)
+call_fametips_function(bot)
 call_betslip_function(bot, imp)
 call_oncallbackquery_function(bot, delay)
 
