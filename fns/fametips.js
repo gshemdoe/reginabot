@@ -47,7 +47,7 @@ module.exports = (bot) => {
 
                 let tip = $('td:nth-child(4)', el).text()
                 let matokeo = $('td:nth-child(5)', el).text()
-                matokeo.replace(/\n/g, '')
+                matokeo = matokeo.replace(/\n/g, '')
                 if (matokeo.length < 2) {
                     matokeo = '-:-'
                 }
@@ -187,7 +187,7 @@ module.exports = (bot) => {
 
                 let tip = $('td:nth-child(4)', el).text()
                 let matokeo = $('td:nth-child(5)', el).text()
-                matokeo.replace(/\n/g, '')
+                matokeo = matokeo.replace(/\n/g, '')
                 if (matokeo.length < 2) {
                     matokeo = '-:-'
                 }
