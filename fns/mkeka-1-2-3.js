@@ -80,7 +80,7 @@ const sendMkeka3 = async (ctx, delay, bot, imp) => {
 
 const supatips = async (ctx, bot, delay, imp) => {
     try {
-        let url = `http://mkekawaleo.com/#supa-za-leo`
+        let url = `http://mikekayaleo.com`
         await bot.telegram.copyMessage(ctx.chat.id, imp.mikekaDB, 255, {
             reply_markup: {
                 inline_keyboard: [
