@@ -131,7 +131,7 @@ module.exports = (bot, delay) => {
             //fametipis---------------
             else if (data.includes('updfameyestd_')) {
                 let nano_Arr = data.split('updfameyestd_')[1].split('+')
-                await supatips_Model.deleteMany({siku: ydd})
+                await fametips_Model.deleteMany({siku: ydd})
                 for (let nano of nano_Arr) {
                     let bin = await bin_supatips_Model.findOne({nano})
                     await fametips_Model.create({
@@ -171,7 +171,7 @@ module.exports = (bot, delay) => {
                 })
             } else if (data.includes('updfamekesho_')) {
                 let nano_Arr = data.split('updfamekesho_')[1].split('+')
-                await supatips_Model.deleteMany({siku: ksh})
+                await fametips_Model.deleteMany({siku: ksh})
                 for (let nano of nano_Arr) {
                     let bin = await bin_supatips_Model.findOne({nano})
                     await fametips_Model.create({
