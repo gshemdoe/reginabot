@@ -146,7 +146,7 @@ module.exports = (bot, delay) => {
                     })
                     await bin_supatips_Model.findOneAndDelete({nano})
                 }
-                await ctx.reply('Mkeka updated successfully', {
+                await ctx.reply('Mkeka was updated successfully', {
                     reply_to_message_id: mid
                 })
             } else if (data.includes('updfametoday_')) {
