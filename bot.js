@@ -73,6 +73,9 @@ let defaultReplyMkp = {
         [
             { text: "🤑 MKEKA #3" },
             { text: "👑 SUPATIPS" },
+        ],
+        [
+            {text: "💡 MSAADA GAL SPORT 💡"}
         ]
     ],
     is_persistent: true,
@@ -631,6 +634,8 @@ bot.on('text', async ctx => {
                 await call_sendMikeka_functions.sendMkeka3(ctx, delay, bot, imp)
             } else if(txt == '👑 SUPATIPS') {
                 await call_sendMikeka_functions.supatips(ctx, bot, delay, imp)
+            } else if(txt == '💡 MSAADA GAL SPORT 💡') {
+                await bot.telegram.copyMessage(ctx.chat.id, imp.mikekaDB, 481)
             }
             //forward to me if sio mkeka
             else {
