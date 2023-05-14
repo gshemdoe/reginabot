@@ -723,39 +723,29 @@ setInterval(() => {
 
     switch (time2check) {
         case '06:00':
+        case '08:00':
+        case '09:00':
+        case '10:00':
+        case '11:00':
             call_scheduled_checker_fn.checkOdds(bot, imp, 'div#2', trhLeo)
             break;
 
         case '19:00':
-            call_scheduled_checker_fn.checkMatokeo(bot, imp, 'div#2', trhLeo)
-            break;
-
-        case '20:30':
-            call_scheduled_checker_fn.checkOdds(bot, imp, 'div#3', trhKesho)
-            break;
-
-        case '21:45':
-            call_scheduled_checker_fn.checkOdds(bot, imp, 'div#3', trhKesho)
-            break;
-
         case '22:15':
-            call_scheduled_checker_fn.checkMatokeo(bot, imp, 'div#2', trhLeo)
-            break;
-
-        case '22:30':
-            call_scheduled_checker_fn.checkOdds(bot, imp, 'div#3', trhKesho)
-            break;
-
-        case '23:45':
-            call_scheduled_checker_fn.checkOdds(bot, imp, 'div#3', trhKesho)
-            break;
-
         case '23:55':
             call_scheduled_checker_fn.checkMatokeo(bot, imp, 'div#2', trhLeo)
             break;
 
+        case '20:30':
+        case '21:45':
+        case '22:30':
+        case '23:45':
+            call_scheduled_checker_fn.checkOdds(bot, imp, 'div#3', trhKesho)
+            break;
+
+        case '00:55':
         case '03:00':
-            call_scheduled_checker_fn.checkMatokeo(bot, imp, 'div#1', trhJana)
+            call_scheduled_checker_fn.checkMatokeo(bot, imp, 'div#2', trhJana)
             break;
     }
 }, 59 * 1000)
