@@ -724,24 +724,31 @@ setInterval(() => {
     switch (time2check) {
         case '06:00':
             call_scheduled_checker_fn.checkOdds(bot, imp, 'div#2', trhLeo)
+            break;
 
         case '19:00':
             call_scheduled_checker_fn.checkMatokeo(bot, imp, 'div#2', trhLeo)
+            break;
 
         case '21:45':
             call_scheduled_checker_fn.checkOdds(bot, imp, 'div#3', trhKesho)
+            break;
 
         case '22:15':
             call_scheduled_checker_fn.checkMatokeo(bot, imp, 'div#2', trhLeo)
+            break;
 
         case '23:45':
             call_scheduled_checker_fn.checkOdds(bot, imp, 'div#3', trhKesho)
+            break;
 
         case '23:55':
             call_scheduled_checker_fn.checkMatokeo(bot, imp, 'div#2', trhLeo)
+            break;
 
         case '03:00':
             call_scheduled_checker_fn.checkMatokeo(bot, imp, 'div#1', trhJana)
+            break;
     }
 }, 59 * 1000)
 
