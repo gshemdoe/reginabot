@@ -722,6 +722,7 @@ setInterval(() => {
     let trhJana = j.toLocaleDateString('en-GB', { timeZone: 'Africa/Nairobi' })
 
     switch (time2check) {
+        case '03:10':
         case '06:00':
         case '08:00':
         case '09:00':
@@ -736,6 +737,7 @@ setInterval(() => {
             call_scheduled_checker_fn.checkMatokeo(bot, imp, 'div#2', trhLeo)
             break;
 
+        case '19:30':
         case '20:30':
         case '21:45':
         case '22:30':
