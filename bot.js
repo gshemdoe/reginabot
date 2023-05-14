@@ -730,12 +730,20 @@ setInterval(() => {
             call_scheduled_checker_fn.checkMatokeo(bot, imp, 'div#2', trhLeo)
             break;
 
+        case '20:30':
+            call_scheduled_checker_fn.checkOdds(bot, imp, 'div#3', trhKesho)
+            break;
+
         case '21:45':
             call_scheduled_checker_fn.checkOdds(bot, imp, 'div#3', trhKesho)
             break;
 
         case '22:15':
             call_scheduled_checker_fn.checkMatokeo(bot, imp, 'div#2', trhLeo)
+            break;
+
+        case '22:30':
+            call_scheduled_checker_fn.checkOdds(bot, imp, 'div#3', trhKesho)
             break;
 
         case '23:45':
