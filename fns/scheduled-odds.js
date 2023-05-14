@@ -63,7 +63,9 @@ const checkOdds = async (bot, imp, tablehusika, siku) => {
                 })
             })
 
-            await bot.telegram.sendMessage(imp.shemdoe, `New matches found and mkeka created successfully\n\n` + text + `Arrs: ${nanoArr}`)
+            await bot.telegram.sendMessage(imp.shemdoe, `New matches found and mkeka created successfully\n\n` + text + `Arrs: ${nanoArr}`, {
+                parse_mode: 'HTML'
+            })
         } else {
             await bot.telegram.sendMessage(imp.shemdoe, `Automatic fetcher run and nothing found\n\n Our Length: ${ourDb.length}\nHer Length: ${tday_table.length}`)
         }
