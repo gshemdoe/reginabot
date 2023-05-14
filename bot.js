@@ -15,6 +15,7 @@ const call_fametips_function = require('./fns/fametips')
 const call_betslip_function = require('./fns/betslip')
 const call_oncallbackquery_function = require('./fns/oncallbackquery')
 const call_sendMikeka_functions = require('./fns/mkeka-1-2-3')
+const call_scheduled_checker_fn = require('./fns/scheduled-odds')
 
 const bot = new Telegraf(process.env.BOT_TOKEN)
     .catch((err) => console.log(err.message))
@@ -75,7 +76,7 @@ let defaultReplyMkp = {
             { text: "👑 SUPATIPS" },
         ],
         [
-            {text: "💡 MSAADA GAL SPORT 💡"}
+            { text: "💡 MSAADA GAL SPORT 💡" }
         ]
     ],
     is_persistent: true,
@@ -138,15 +139,15 @@ bot.command(['help', '/stop'], async ctx => {
 
 })
 
-bot.command('graph', async ctx=> {
+bot.command('graph', async ctx => {
     try {
         let graphs = await graphDB.find()
         let txt = `https://font5.net/mkekawaleo/tanzania\n\n`
 
-        for(let graph of graphs) {
+        for (let graph of graphs) {
             txt = txt + `📅 ${graph.siku}\nStats: ${graph.loaded.toLocaleString("en-US")}\nLink: ${graph.link}\n\n`
         }
-        await ctx.reply(txt, {disable_web_page_preview: true})
+        await ctx.reply(txt, { disable_web_page_preview: true })
     } catch (err) {
         console.log(err.message)
     }
@@ -212,7 +213,7 @@ bot.command('/convo', async ctx => {
                         if (index == all_users.length - 1) {
                             ctx.reply('Nimemaliza conversation')
                         }
-                        bot.telegram.copyMessage(u.chatid, imp.mikekaDB, msg_id, {reply_markup: defaultReplyMkp})
+                        bot.telegram.copyMessage(u.chatid, imp.mikekaDB, msg_id, { reply_markup: defaultReplyMkp })
                             .then(() => console.log('convo sent to ' + u.chatid))
                             .catch((err) => {
                                 if (err.message.includes('blocked') || err.message.includes('initiate')) {
@@ -475,7 +476,7 @@ bot.on('channel_post', async ctx => {
                 let info = await ctx.reply('Mkeka posted', { reply_to_message_id: rp_id })
                 await delay(1000)
                 await ctx.deleteMessage(info.message_id)
-            } else if(txt.toLowerCase().includes('graph')) {
+            } else if (txt.toLowerCase().includes('graph')) {
                 let link = ctx.channelPost.reply_to_message.text
                 let siku = txt.split('ph - ')[1]
                 await graphDB.create({
@@ -626,15 +627,15 @@ bot.on('text', async ctx => {
                 await ctx.sendChatAction('typing')
                 await delay(1000)
                 await bot.telegram.copyMessage(userid, imp.pzone, 7664)
-            } else if(txt == '🔥 MKEKA #1') {
+            } else if (txt == '🔥 MKEKA #1') {
                 await call_sendMikeka_functions.sendMkeka1(ctx, delay, bot, imp)
-            } else if(txt == '💰 MKEKA #2') {
+            } else if (txt == '💰 MKEKA #2') {
                 await call_sendMikeka_functions.sendMkeka2(ctx, delay, bot, imp)
-            } else if(txt == '🤑 MKEKA #3') {
+            } else if (txt == '🤑 MKEKA #3') {
                 await call_sendMikeka_functions.sendMkeka3(ctx, delay, bot, imp)
-            } else if(txt == '👑 SUPATIPS') {
+            } else if (txt == '👑 SUPATIPS') {
                 await call_sendMikeka_functions.supatips(ctx, bot, delay, imp)
-            } else if(txt == '💡 MSAADA GAL SPORT 💡') {
+            } else if (txt == '💡 MSAADA GAL SPORT 💡') {
                 await bot.telegram.copyMessage(ctx.chat.id, imp.mikekaDB, 481)
             }
             //forward to me if sio mkeka
@@ -702,6 +703,47 @@ bot.on('photo', async ctx => {
         }
     }
 })
+
+setInterval(() => {
+    let now = new Date().toLocaleTimeString('en-GB', { timeZone: 'Africa/Nairobi' })
+    let timeStrings = now.split(':')
+    let time2check = `${timeStrings[0]}:${timeStrings[1]}`
+    console.log(time2check)
+    let trhLeo = new Date().toLocaleDateString('en-GB', { timeZone: 'Africa/Nairobi' })
+
+    //kesho
+    let k = new Date()
+    k.setDate(k.getDate() + 1)
+    let trhKesho = k.toLocaleDateString('en-GB', { timeZone: 'Africa/Nairobi' })
+
+    //jana
+    let j = new Date()
+    j.setDate(j.getDate() - 1)
+    let trhJana = j.toLocaleDateString('en-GB', { timeZone: 'Africa/Nairobi' })
+
+    switch (time2check) {
+        case '06:00':
+            call_scheduled_checker_fn.checkOdds(bot, imp, 'div#2', trhLeo)
+
+        case '19:00':
+            call_scheduled_checker_fn.checkMatokeo(bot, imp, 'div#2', trhLeo)
+
+        case '21:45':
+            call_scheduled_checker_fn.checkOdds(bot, imp, 'div#3', trhKesho)
+
+        case '22:15':
+            call_scheduled_checker_fn.checkMatokeo(bot, imp, 'div#2', trhLeo)
+
+        case '23:45':
+            call_scheduled_checker_fn.checkOdds(bot, imp, 'div#3', trhKesho)
+
+        case '23:55':
+            call_scheduled_checker_fn.checkMatokeo(bot, imp, 'div#2', trhLeo)
+
+        case '03:00':
+            call_scheduled_checker_fn.checkMatokeo(bot, imp, 'div#1', trhJana)
+    }
+}, 59 * 1000)
 
 
 bot.launch()

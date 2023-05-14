@@ -32,11 +32,12 @@ module.exports = (bot) => {
                 let time_data = $('td:nth-child(1)', el).text()
                 let time_arr = time_data.split(':')
                 let hrs = Number(time_arr[0])
-                let actual_time = hrs + 2
-                if(actual_time > 24) {
-                    actual_time = '0' + (actual_time - 25)
-                }
                 let min = time_arr[1]
+                let actual_time = hrs + 2
+                if(actual_time >= 24) {
+                    actual_time = `23`
+                    min = '59'
+                }
                 let time = `${actual_time}:${min}`
 
                 let siku = new Date().toLocaleDateString('en-GB', { timeZone: 'Africa/Nairobi' })
