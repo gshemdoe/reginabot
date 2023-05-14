@@ -51,14 +51,14 @@ const sendMkeka3 = async (ctx, delay, bot, imp) => {
                 odds = (odds * m.odds).toFixed(2)
             }
 
-            let bwTZ = `https://www.betway.co.tz/jackpots/?btag=P94949-PR26305-CM86284-TS1971458&`
+            let bwTZ = `https://www.betway.co.tz/?btag=P94949-PR26219-CM87071-TS1971458&`
             let gsb = 'https://track.africabetpartners.com/visit/?bta=35468&nci=5439'
             let pm = `https://pmaff.com/?serial=61291818&creative_id=304&anid=telegram&pid=telegram`
             let tenbet = `https://go.aff.10betafrica.com/ys6tiwg4?utm_source=telegram`
             let ke = `https://www.betway.co.ke/?btag=P94949-PR24943-CM78241-TS1971458&`
             let ug = `https://track.africabetpartners.com/visit/?bta=35468&nci=5740`
 
-            let finaText = txt + `<b>🔥 Total Odds: ${odds}</b>\n\n▬▬▬▬▬▬▬▬▬▬▬▬\n\nMkeka huu umeandaliwa BetWay\n\n<i>» Ofa ya 50% kwa deposit ya kwanza\n» Betslip yenye Bonus hadi 700%\n» Cash-out inapatikana muda wote.</i> \n\nKama bado huna account,\n\n<b>✓ Jisajili Hapa \n\n👤 (Tanzania 🇹🇿)</b>\n<a href="${bwTZ}">https://betway.co.tz/register\nhttps://betway.co.tz/register</a>\n▬\n<b>👤 (Kenya 🇰🇪)</b>\n<a href="${ke}">https://betway.co.ke/register</a>\n▬\n<b>👤 (Uganda 🇺🇬)</b>\n<a href="${ug}">https://betway.co.ug/register</a>\n\n© MkekaWaLeo`
+            let finaText = txt + `<b>🔥 Total Odds: ${odds}</b>\n\n▬▬▬▬▬▬▬▬▬▬▬▬\n\nMkeka huu umeandaliwa BetWay\n\n<i>» Ofa ya 50%, deposit ya kwanza.\n» Betslip ya bonus hadi 700%\n» Cash-out inapatikana muda wote.</i> \n\nKama bado huna account,\n\n<b>✓ Jisajili Hapa \n\n👤 (Tanzania 🇹🇿)</b>\n<a href="${bwTZ}">https://betway.co.tz/register\nhttps://betway.co.tz/register</a>\n▬\n<b>👤 (Kenya 🇰🇪)</b>\n<a href="${ke}">https://betway.co.ke/register</a>\n▬\n<b>👤 (Uganda 🇺🇬)</b>\n<a href="${ug}">https://betway.co.ug/register</a>\n\n©MkekaWaLeo`
 
             await ctx.reply(finaText, { parse_mode: 'HTML', disable_web_page_preview: true })
         } else {
