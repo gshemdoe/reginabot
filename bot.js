@@ -68,15 +68,7 @@ const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms))
 let defaultReplyMkp = {
     keyboard: [
         [
-            { text: "🔥 MKEKA #1" },
-            { text: "💰 MKEKA #2" },
-        ],
-        [
-            { text: "🤑 MKEKA #3" },
-            { text: "👑 SUPATIPS" },
-        ],
-        [
-            { text: "💡 MSAADA GAL SPORT 💡" }
+            { text: "🔥 MIKEKA YA UHAKIKA LEO 💰" }
         ]
     ],
     is_persistent: true,
@@ -622,16 +614,20 @@ bot.on('text', async ctx => {
                 await ctx.sendChatAction('typing')
                 await delay(1000)
                 await bot.telegram.copyMessage(userid, imp.pzone, 7664)
-            } else if (txt == '🔥 MKEKA #1') {
+            } else if(txt == '🔥 MKEKA #1') {
                 await call_sendMikeka_functions.sendMkeka1(ctx, delay, bot, imp)
-            } else if (txt == '💰 MKEKA #2') {
+            } else if(txt == '💰 MKEKA #2') {
                 await call_sendMikeka_functions.sendMkeka2(ctx, delay, bot, imp)
-            } else if (txt == '🤑 MKEKA #3') {
+            } else if(txt == '🤑 MKEKA #3') {
                 await call_sendMikeka_functions.sendMkeka3(ctx, delay, bot, imp)
-            } else if (txt == '👑 SUPATIPS') {
+            } else if(txt == '👑 SUPATIPS') {
                 await call_sendMikeka_functions.supatips(ctx, bot, delay, imp)
-            } else if (txt == '💡 MSAADA GAL SPORT 💡') {
+            }
+            else if(txt == '💡 MSAADA GAL SPORT 💡') {
                 await bot.telegram.copyMessage(ctx.chat.id, imp.mikekaDB, 481)
+            }
+            else if(txt == '🔥 MIKEKA YA UHAKIKA LEO 💰') {
+                await bot.telegram.copyMessage(ctx.chat.id, imp.mikekaDB, 592)
             }
             //forward to me if sio mkeka
             else {
