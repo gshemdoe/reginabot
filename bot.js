@@ -717,6 +717,8 @@ setInterval(() => {
         case '09:00':
         case '10:00':
         case '11:00':
+        case '12:00':
+        case '13:00':
             call_scheduled_checker_fn.checkOdds(bot, imp, 'div#2', trhLeo)
             break;
 
@@ -735,8 +737,14 @@ setInterval(() => {
             break;
 
         case '00:55':
-        case '03:00':
+        case '01:00':
+        case '01:55':
             call_scheduled_checker_fn.checkMatokeo(bot, imp, 'div#2', trhJana)
+            break;
+
+        case '03:03':
+        case '04:03':
+            call_scheduled_checker_fn.checkMatokeo(bot, imp, 'div#1', trhJana)
             break;
     }
 }, 59 * 1000)
