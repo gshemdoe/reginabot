@@ -142,7 +142,8 @@ module.exports = (bot, delay) => {
                         league: bin.league,
                         nano: bin.nano,
                         status: bin.status,
-                        match: bin.match
+                        match: bin.match,
+                        UTC3: bin.UTC3
                     })
                     await bin_supatips_Model.findOneAndDelete({nano})
                 }
@@ -162,7 +163,8 @@ module.exports = (bot, delay) => {
                         league: bin.league,
                         nano: bin.nano,
                         status: bin.status,
-                        match: bin.match
+                        match: bin.match,
+                        UTC3: bin.UTC3
                     })
                     await bin_supatips_Model.findOneAndDelete({nano})
                 }
@@ -182,7 +184,8 @@ module.exports = (bot, delay) => {
                         league: bin.league,
                         nano: bin.nano,
                         status: bin.status,
-                        match: bin.match
+                        match: bin.match,
+                        UTC3: bin.UTC3
                     })
                     await bin_supatips_Model.findOneAndDelete({nano})
                 }

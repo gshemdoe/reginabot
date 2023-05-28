@@ -35,6 +35,10 @@ const supatipSchema = new Schema({
         type: Date,
         default: Date.now,
         expires: '30m'
+    },
+    UTC3: {
+        type: Number,
+        default: null
     }
 }, {strict: false, timestamps: true })
 
