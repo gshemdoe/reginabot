@@ -70,7 +70,7 @@ const famecheckOdds = async (bot, imp, tablehusika, siku) => {
                 parse_mode: 'HTML'
             })
         } else {
-            await bot.telegram.sendMessage(imp.shemdoe, `Fame: Automatic fetcher run and nothing found\n\n Our Length: ${ourDb.length}\nHer Length: ${tday_table.length}`)
+            await bot.telegram.sendMessage(imp.shemdoe, `Fame: Automatic fetcher run and nothing found\n\n Our Length: ${ourDb.length}\nHer Length: ${tday_trs.length}`)
         }
     } catch (err) {
         await bot.telegram.sendMessage(imp.shemdoe, 'Not getting odds... ' + err.message)
