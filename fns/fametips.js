@@ -32,14 +32,18 @@ module.exports = (bot) => {
                 let time_arr = time_data.split(':')
                 let hrs = Number(time_arr[0])
                 let actual_time = hrs + 2
-                if(actual_time > 24) {
+                if (actual_time > 24) {
                     actual_time = '0' + (actual_time - 25)
                 }
                 let min = time_arr[1]
                 let time = `${actual_time}:${min}`
 
                 let siku = new Date().toLocaleDateString('en-GB', { timeZone: 'Africa/Nairobi' })
+                let mwk = Number(siku.split('/')[2])
+                let mwz = Number(siku.split('/')[1])
+                let trh = Number(siku.split('/')[0])
                 let nano = nanoid(4)
+                let UTC3 = Date.UTC(mwk, mwz - 1, trh, actual_time, Number(min))
 
                 let league = $('td:nth-child(2)', el).text()
                 let match = $('td:nth-child(3)', el).text()
@@ -61,7 +65,7 @@ module.exports = (bot) => {
                 }
 
                 await bin_supatips_Model.create({
-                    time, league, match, tip, siku, nano, matokeo
+                    time, league, match, tip, siku, nano, matokeo, UTC3
                 })
             })
             await ctx.reply(text + `Arrs: ${nanoArr}`, {
@@ -99,6 +103,7 @@ module.exports = (bot) => {
 
             let tday_table = $('#myTabContent #contact table tbody tr')
             let nd = new Date()
+            nd.setDate(nd.getDate() + 1)
             let siku = nd.toLocaleDateString('en-GB', { timeZone: 'Africa/Nairobi' })
             if (tday_table.length >= 1) {
                 tday_table.each(async (i, el) => {
@@ -108,6 +113,11 @@ module.exports = (bot) => {
                     let min = time_arr[1]
                     let time = `${hrs + 2}:${min}`
                     let nano = nanoid(4)
+
+                    let mwk = Number(siku.split('/')[2])
+                    let mwz = Number(siku.split('/')[1])
+                    let trh = Number(siku.split('/')[0])
+                    let UTC3 = Date.UTC(mwk, mwz - 1, trh, hrs + 2, Number(min))
 
                     let league = $('td:nth-child(2)', el).text()
                     let match = $('td:nth-child(3)', el).text()
@@ -128,7 +138,7 @@ module.exports = (bot) => {
                     }
 
                     await bin_supatips_Model.create({
-                        time, league, match, tip, siku, nano, matokeo
+                        time, league, match, tip, siku, nano, matokeo, UTC3
                     })
                 })
 
@@ -166,20 +176,25 @@ module.exports = (bot) => {
 
             let tday_table = $('#myTabContent #home table tbody tr')
             let nn = new Date()
-            nn.setDate(nn.getDate()-1)
+            nn.setDate(nn.getDate() - 1)
             let siku = nn.toLocaleDateString('en-GB', { timeZone: 'Africa/Nairobi' })
             tday_table.each(async (i, el) => {
                 let time_data = $('td:nth-child(1)', el).text()
                 let time_arr = time_data.split(':')
                 let hrs = Number(time_arr[0])
                 let actual_time = hrs + 2
-                if(actual_time > 24) {
+                if (actual_time > 24) {
                     actual_time = '0' + (actual_time - 25)
                 }
                 let min = time_arr[1]
                 let time = `${actual_time}:${min}`
 
                 let nano = nanoid(4)
+
+                let mwk = Number(siku.split('/')[2])
+                let mwz = Number(siku.split('/')[1])
+                let trh = Number(siku.split('/')[0])
+                let UTC3 = Date.UTC(mwk, mwz - 1, trh, actual_time, Number(min))
 
                 let league = $('td:nth-child(2)', el).text()
                 let match = $('td:nth-child(3)', el).text()
@@ -201,7 +216,7 @@ module.exports = (bot) => {
                 }
 
                 await bin_supatips_Model.create({
-                    time, league, match, tip, siku, nano, matokeo
+                    time, league, match, tip, siku, nano, matokeo, UTC3
                 })
                 console.log(matokeo)
             })
