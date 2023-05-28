@@ -16,6 +16,7 @@ const call_betslip_function = require('./fns/betslip')
 const call_oncallbackquery_function = require('./fns/oncallbackquery')
 const call_sendMikeka_functions = require('./fns/mkeka-1-2-3')
 const call_scheduled_checker_fn = require('./fns/scheduled-odds')
+const call_famescheduled_fn = require('./fns/fame-scheduled')
 
 const bot = new Telegraf(process.env.BOT_TOKEN)
     .catch((err) => console.log(err.message))
@@ -745,6 +746,32 @@ setInterval(() => {
         case '03:03':
         case '04:03':
             call_scheduled_checker_fn.checkMatokeo(bot, imp, 'div#1', trhJana)
+            break;
+
+        //fametips
+        case '06:07':
+        case '08:07':
+        case '09:07':
+        case '10:07':
+        case '12:07':
+        case '15:07':
+            call_famescheduled_fn.famecheckMatokeo(bot, imp, '#home', trhJana)
+            break;
+
+        case '06:17':
+        case '09:17':
+            call_famescheduled_fn.famecheckOdds(bot, imp, '#profile', trhLeo)
+            break;
+
+        case '16:07':
+        case '18:07':
+        case '19:07':
+        case '20:07':
+        case '21:07':
+        case '22:07':
+        case '23:07':
+        case '23:57':
+            call_famescheduled_fn.famecheckOdds(bot, imp, '#contact', trhKesho)
             break;
     }
 }, 59 * 1000)
