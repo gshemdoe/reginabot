@@ -80,12 +80,13 @@ bot.start(async ctx => {
     try {
         if (ctx.startPayload) {
             let pload = ctx.startPayload
-            let url = `https://t.me/+PWiPWm0vB5Y4ZDhk`
+            let rahatupu = `https://t.me/+PWiPWm0vB5Y4ZDhk`
+            let urafiki = `https://t.me/+EOEvgGu3B49lYmY0`
             if (pload == 'ngono_bongo') {
                 console.log('Ngono Payload Started')
                 await bot.telegram.copyMessage(ctx.chat.id, imp.pzone, 7617, {
                     reply_markup: {
-                        inline_keyboard: [[{ text: '✅ Kubali / Accept', url }]]
+                        inline_keyboard: [[{ text: '✅ Kubali / Accept', url: urafiki }]]
                     }
                 })
             }
