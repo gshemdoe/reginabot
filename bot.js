@@ -807,3 +807,13 @@ process.on('uncaughtException', (err) => {
             console.log(err.message + ' while sending you')
         })
 })
+
+
+//for flyctl & adaptable
+const http = require('http')
+const server = http.createServer((req, res)=> {
+    res.writeHead(200, {"Content-Type": "text/plain"})
+    res.end('Karibu kwa Regina')
+})
+
+server.listen(process.env.PORT || 3000, ()=> console.log('Listen to port 3000'))
